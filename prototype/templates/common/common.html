@@ -1,0 +1,87 @@
+{%extends 'common/base.html'%} {% block CSS %}
+<style>
+  .main-body-container {
+    width: 800px;
+    height: 100%;
+    margin-right: 300px;
+  }
+  .main-body-box {
+    border: solid 1px grey;
+    background-color: rgba(240, 249, 254, 1);
+    margin-bottom: 20px;
+  }
+</style>
+
+{% endblock %} {% block BODY %}
+<form action="{% url 'common:submit' %}" method="POST">
+  {% csrf_token %}
+  <div class="main-body-container">
+    <div class="main-body-box">
+      {% for field in commonform %}
+      <div style="margin: 30px">
+        <div class="form-floating mb-3">
+          {{field}}
+          <label for="floatingInput">{{field.label}}</label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="main-body-box">
+      {% for field in buildinginfoform %}
+      <div style="margin: 30px">
+        <div class="form-floating mb-3">
+          {{field}}
+          <label for="floatingInput">{{field.label}}</label>
+        </div>
+      </div>
+      {% endfor %}
+ <div style="margin: 30px">
+        <div class="btn-group" style="display:flex;align-items:center;">
+          <div class="btn btn-info dropdown-toggle" style="width:100%;padding:15px" aria-expanded="false">
+            {{ buildingcategoryform }}
+          </div>
+        </div>
+      </div> 
+      
+    </div>
+
+
+
+
+    <div class="main-body-box">
+      {% for field in contractform %}
+      <div style="margin: 30px">
+        <div class="form-floating mb-3">
+          {{field}}
+          <label for="floatingInput">{{field.label}}</label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="main-body-box">
+      <div style="margin: 30px">
+        <div class="mb-3">
+          <label for="formFile" class="form-label">전경사진</label>
+          <input class="form-control" type="file" id="formFile" name="building_image">
+        </div>
+        <div class="mb-3">
+          <label for="formFile" class="form-label">지도</label>
+          <input class="form-control" type="file" id="formFile" name="map_image">
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="main-body-box">
+      <div style="margin: 30px">
+        <input type="submit" class="btn btn-success" value="Generate" />
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
