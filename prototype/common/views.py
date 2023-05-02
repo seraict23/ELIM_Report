@@ -11,7 +11,7 @@ from engine.common_gen import Worker
 # 경로
 
 
-def Test(req):
+def Common(req):
     common_form = CommonForm()
     building_form = BuilidingForm()
     contract_form = ContractForm()
@@ -30,8 +30,8 @@ def Test(req):
         })
 
 
-def Common(req):
-    pass
+def Cover(req):
+    return render(req, "prototype/cover.html")
 
 
 def Submit(req):
@@ -39,4 +39,7 @@ def Submit(req):
     # sub.start()
 
     print(req.POST)
+    return render(req, "common/playground.html")
+
+def Chapter1(req):
     return render(req, "common/playground.html")
