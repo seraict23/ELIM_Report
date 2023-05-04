@@ -6,5 +6,6 @@ urlpatterns = [
     path("new/", views.Common, name="new"),
     path("submit/", views.Submit, name="submit"),
     path("", views.Cover, name="cover"),
-    path("chapter1/", views.Chapter1 , name="chapter1")
+    path("chapter1/", views.Chapter1 , name="chapter1"),
+    path("chapter2/", views.Chapter2 , name="chapter2")
 ]

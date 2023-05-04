@@ -1,0 +1,129 @@
+{%extends 'common/base.html'%} {% block CSS %}
+<style>
+  .main-body-container {
+    width: 800px;
+    height: 100%;
+    margin-right: 300px;
+  }
+  .main-body-box {
+    border: solid 1px grey;
+    background-color: rgba(240, 249, 254, 1);
+    margin-bottom: 20px;
+  }
+  .col {
+    padding-left:0px;
+    padding-right:0px;
+    align-items:center;
+  }
+  .col-8 {
+    padding-left:0px;
+    padding-right:0px;
+  }
+  .input-in-grid {
+    display: block;
+    width: 100%;
+    border: none;
+    margin: 0;
+  }
+</style>
+
+{% endblock %} {% block BODY %}
+
+<div class="main-body-container">
+  <div class="main-body-box">
+    <div style="margin: 30px">
+        {% comment %} 셀렉터 박스 {% endcomment %}
+      <select
+        id="1-usagechange"
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+      >
+        <option selected>용도변경</option>
+        <option value="yes">유</option>
+        <option value="no">무</option>
+        <option value="dunno">불명</option>
+      </select>
+    </div>
+    {% comment %} 표 {% endcomment %}
+    <div
+      id="1-usagechange-table" 
+      style="margin: 30px;display:none"
+    >
+      <div class="container text-center" style="border: solid 1px grey">
+        <div class="row">
+          <div class="col">부위<br />(층수)</div>
+          <div class="col-4">
+            <div class="row">
+              <div>변경전</div>
+            </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="row">
+              <div>변경후</div>
+            </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+              </div>
+
+          </div>
+          <div class="col">날짜</div>
+          <div class="col">비고</div>
+        </div>
+        {% comment %} 입력 {% endcomment %}
+        <div class="row">
+          <div class="col">
+            <input class="input-in-grid">
+          </div>
+          <div class="col-4">
+            <div></div>
+            <div class="row">
+              <div class="col-8">
+                <input class="input-in-grid"></div>
+              <div class="col">
+                <input class="input-in-grid"></div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div ></div>
+            <div class="row">
+              <div class="col-8">
+                <input class="input-in-grid"></div>
+              <div class="col">
+                <input class="input-in-grid"></div>
+            </div>
+          </div>
+          <div class="col">
+            <input class="input-in-grid"></div>
+          <div class="col">
+            <input class="input-in-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  /* Checkbox change event */
+  $("#1-usagechange").change(function () {
+    var value = $(this).val();
+    if (value == "yes") {
+        
+        console.log(value)
+        $("#1-usagechange-table").css({display: "flex"})
+    }
+  });
+</script>
+
+{%endblock%}

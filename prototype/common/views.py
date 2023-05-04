@@ -43,3 +43,6 @@ def Submit(req):
 
 def Chapter1(req):
     return render(req, "common/playground.html")
+
+def Chapter2(req):
+    return render(req, "chapter02/chapter02.html")
