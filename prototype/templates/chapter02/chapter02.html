@@ -659,8 +659,11 @@
   <div class="main-body-box">
     {% comment %} 셀렉터 박스 {% endcomment %}
     <div style="margin: 30px">
-      <button type="button" class="btn btn-primary btn-lg">저장하기</button>
-      <button type="button" class="btn btn-outline-primary btn-lg">문서생성</button>
+      <form action="{% url 'common:chapter3' %}">
+        
+      <input type="submit" class="btn btn-primary btn-lg" value="저장하기"></button>
+      </form>
+      <button id="temporary" type="button" class="btn btn-outline-primary btn-lg">문서생성</button>
     </div>
   </div>
 
@@ -673,6 +676,11 @@
 ></script>
 
 <script>
+  $("#temporary").on("click", function() {
+    alert("아직 미구현 기능입니다.")
+})
+
+
   /* Checkbox change event */
   $("#1-usagechange").change(function () {
     var value = $(this).val();

@@ -42,7 +42,10 @@ def Submit(req):
     return render(req, "common/playground.html")
 
 def Chapter1(req):
-    return render(req, "common/playground.html")
+    return render(req, "chapter01/chapter01.html")
 
 def Chapter2(req):
     return render(req, "chapter02/chapter02.html")
+
+def Chapter3(req):
+    return render(req, "chapter03/chapter03.html")

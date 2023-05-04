@@ -8,9 +8,10 @@ from datetime import date, timedelta
 
 def info(req):
     q = req.GET.get('year')
+    p = req.GET.get('money')
 
-    if q is None:
-        context = {"required_year":0}
+    if (q is None) or (p is None) :
+        context = {"required_year":0, "money_value":0}
         return render(req, "engineer_db/info.html", context)
     
     else:
@@ -25,7 +26,8 @@ def info(req):
         engineer_list = old_engineer
         context = {
             "engineer_list":engineer_list,
-            "required_year": req.GET.get('year')
+            "required_year": req.GET.get('year'),
+            "money_value": req.GET.get('money')
         }
         return render(req, "engineer_db/info.html", context)
     

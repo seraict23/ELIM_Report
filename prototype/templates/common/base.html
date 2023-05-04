@@ -68,7 +68,11 @@
               {%endif%}
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">3장 현황조사</a>
+              {% if request.get_full_path == "/chapter3/" %}
+              <a class="nav-link active" href="{% url 'common:chapter3' %}">3장 현황조사</a>
+              {%else%}
+              <a class="nav-link" href="{% url 'common:chapter3' %}">3장 현황조사</a>
+              {%endif%}
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">4장 종합결론</a>
