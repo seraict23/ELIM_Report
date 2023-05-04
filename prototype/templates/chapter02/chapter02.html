@@ -11,28 +11,57 @@
     margin-bottom: 20px;
   }
   .col {
-    padding-left:0px;
-    padding-right:0px;
-    align-items:center;
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 100%;
+    vertical-align: middle;
   }
   .col-8 {
-    padding-left:0px;
-    padding-right:0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+  }
+  .col-2 {
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+  }
+  .col-3 {
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+  }
+  .col-4 {
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
   }
   .input-in-grid {
     display: block;
     width: 100%;
     border: none;
     margin: 0;
+    border:dotted 1px grey;
+  }
+  .square {
+    width: 50%;
+    position: relative;
+    border: 1px solid grey;
+  }
+  .square:after {
+    content: "";
+    display: none;
+    padding-bottom: 80%;
   }
 </style>
 
 {% endblock %} {% block BODY %}
 
 <div class="main-body-container">
+  {% comment %} 용도변경 {% endcomment %}
   <div class="main-body-box">
     <div style="margin: 30px">
-        {% comment %} 셀렉터 박스 {% endcomment %}
+      {% comment %} 셀렉터 박스 {% endcomment %}
       <select
         id="1-usagechange"
         class="form-select form-select-lg mb-3"
@@ -46,66 +75,595 @@
     </div>
     {% comment %} 표 {% endcomment %}
     <div
-      id="1-usagechange-table" 
-      style="margin: 30px;display:none"
+      id="1-usagechange-table"
+      style="margin: 30px; display: none; flex-direction: column"
     >
       <div class="container text-center" style="border: solid 1px grey">
         <div class="row">
           <div class="col">부위<br />(층수)</div>
           <div class="col-4">
-            <div class="row">
-              <div>변경전</div>
-            </div>
+            <div class="container text-center">
               <div class="row">
-                <div class="col-8">용도</div>
-                <div class="col">면적</div>
-
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="row">
-              <div>변경후</div>
-            </div>
+                <div>변경전</div>
+              </div>
               <div class="row">
                 <div class="col-8">용도</div>
                 <div class="col">면적</div>
               </div>
-
+            </div>
           </div>
-          <div class="col">날짜</div>
-          <div class="col">비고</div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row">
+                <div>변경후</div>
+              </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+              </div>
+            </div>
+          </div>
+          <div class="col" style="padding-top:10px">날짜</div>
+          <div class="col"><br>비고</div>
         </div>
         {% comment %} 입력 {% endcomment %}
         <div class="row">
           <div class="col">
-            <input class="input-in-grid">
+            <input class="input-in-grid" />
           </div>
           <div class="col-4">
-            <div></div>
-            <div class="row">
-              <div class="col-8">
-                <input class="input-in-grid"></div>
-              <div class="col">
-                <input class="input-in-grid"></div>
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" />
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-4">
-            <div ></div>
-            <div class="row">
-              <div class="col-8">
-                <input class="input-in-grid"></div>
-              <div class="col">
-                <input class="input-in-grid"></div>
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" />
+                </div>
+              </div>
             </div>
           </div>
           <div class="col">
-            <input class="input-in-grid"></div>
+            <input class="input-in-grid" />
+          </div>
           <div class="col">
-            <input class="input-in-grid"></div>
+            <input class="input-in-grid" />
+          </div>
         </div>
+        <div class="row">
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+        </div>
+      </div>
+
+      {% comment %} 사진추가 {% endcomment %}
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 30px">
+          <button id="1-usagechange-btn" class="btn btn-primary" type="button">
+            사진추가
+          </button>
+        </div>
+
+        <div
+          id="1-usagechange-images"
+          style="display: none; flex-direction: row"
+        >
+          <div class="square">
+            <div class="1-square-inner"></div>
+          </div>
+          <div class="square">
+            <div class="1-square-inner"></div>
+          </div>
+        </div>
+        <button
+          id="1-usagechange-btn2"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
       </div>
     </div>
   </div>
+
+  {% comment %} 구조변경 {% endcomment %}
+  <div class="main-body-box">
+    <div style="margin: 30px">
+      {% comment %} 셀렉터 박스 {% endcomment %}
+      <select
+        id="2-structurechange"
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+      >
+        <option selected>구조변경</option>
+        <option value="yes">유</option>
+        <option value="no">무</option>
+        <option value="dunno">불명</option>
+      </select>
+    </div>
+
+    {% comment %} 표 {% endcomment %}
+    <div
+      id="2-structurechange-table"
+      style="margin: 30px; display: none; flex-direction: column"
+    >
+      <div class="container text-center" style="border: solid 1px grey">
+        <div class="row">
+          <div class="col">동</div>
+          <div class="col">부재명</div>
+          <div class="col">기호</div>
+          <div class="col-2">위치</div>
+          <div class="col-3">내용</div>
+          <div class="col">담당자</div>
+          <div class="col">날짜</div>
+        </div>
+        {% comment %} 입력 {% endcomment %}
+        <div class="row">
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-2">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-3">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+        </div>
+      </div>
+
+      {% comment %} 사진추가 {% endcomment %}
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 30px">
+          <button
+            id="2-structurechange-btn"
+            class="btn btn-primary"
+            type="button"
+          >
+            사진추가
+          </button>
+        </div>
+
+        <div
+          id="2-structurechange-images"
+          style="display: none; flex-direction: row"
+        >
+          <div class="square">
+            <div class="2-square-inner"></div>
+          </div>
+          <div class="square">
+            <div class="2-square-inner"></div>
+          </div>
+        </div>
+        <button
+          id="2-structurechange-btn2"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} 주변조건의 변경사항 {% endcomment %}
+  <div class="main-body-box">
+    <div style="margin: 30px">
+      {% comment %} 셀렉터 박스 {% endcomment %}
+      <select
+        id="3-environmentchange"
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+      >
+        <option selected>주변조건의 변경사항</option>
+        <option value="yes">유</option>
+        <option value="no">무</option>
+        <option value="dunno">불명</option>
+      </select>
+    </div>
+
+    {% comment %} 표 {% endcomment %}
+    <div
+      id="3-environmentchange-table"
+      style="margin: 30px; display: none; flex-direction: column"
+    >
+      <div class="container text-center" style="border: solid 1px grey">
+        <div class="row">
+          <div class="col">구분</div>
+          <div class="col">위치</div>
+          <div class="col-8">
+            <div class="row" style="justify-content: center">변경사항</div>
+            <div class="row">
+              <div class="col">변경 전</div>
+              <div class="col">변경 후</div>
+            </div>
+          </div>
+        </div>
+        {% comment %} 입력 {% endcomment %}
+        <div class="row">
+          <div class="col">사용하중</div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <input class="input-in-grid" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">기초 및 지반조건</div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <input class="input-in-grid" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">주변환경</div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <input class="input-in-grid" />
+          </div>
+        </div>
+      </div>
+      {% comment %} 사진추가 {% endcomment %}
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 30px">
+          <button
+            id="3-environmentchange-btn"
+            class="btn btn-primary"
+            type="button"
+          >
+            사진추가
+          </button>
+        </div>
+
+        <div
+          id="3-environmentchange-images"
+          style="display: none; flex-direction: row"
+        >
+          <div class="square">
+            <div class="3-square-inner"></div>
+          </div>
+          <div class="square">
+            <div class="3-square-inner"></div>
+          </div>
+        </div>
+        <button
+          id="3-environmentchange-btn2"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} 증/개축 {% endcomment %}
+  <div class="main-body-box">
+    {% comment %} 셀렉터 박스 {% endcomment %}
+    <div style="margin: 30px">
+      
+      <select
+        id="4-expansion"
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+      >
+        <option selected>증/개축</option>
+        <option value="yes">유</option>
+        <option value="no">무</option>
+        <option value="dunno">불명</option>
+      </select>
+    </div>
+    {% comment %} 표 {% endcomment %}
+    <div
+      id="4-expansion-table"
+      style="margin: 30px; display: none; flex-direction: column"
+    >
+      <div class="container text-center" style="border: solid 1px grey">
+        <div class="row">
+          <div class="col-sm">부위<br />(층수)</div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row">
+                <div>변경전</div>
+              </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row">
+                <div>변경후</div>
+              </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm">날짜</div>
+          <div class="col-sm">비고</div>
+        </div>
+        {% comment %} 입력 {% endcomment %}
+        <div class="row">
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row"></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" />
+                </div>
+                <div class="col-4">
+                  <input class="input-in-grid" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" />
+          </div>
+        </div>
+      </div>
+      {% comment %} 사진추가 {% endcomment %}
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 30px">
+          <button id="4-expansion-btn" class="btn btn-primary" type="button">
+            사진추가
+          </button>
+        </div>
+
+        <div id="4-expansion-images" style="display: none; flex-direction: row">
+          <div class="square">
+            <div class="4-square-inner"></div>
+          </div>
+          <div class="square">
+            <div class="4-square-inner"></div>
+          </div>
+        </div>
+        <button
+          id="4-expansion-btn2"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} 과하중 및 적재하중 {% endcomment %}
+  <div class="main-body-box">
+    {% comment %} 셀렉터 박스 {% endcomment %}
+    <div style="margin: 30px">
+      
+      <select
+        id="5-overload"
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+      >
+        <option selected>과하중 및 적재하중</option>
+        <option value="yes">유</option>
+        <option value="no">무</option>
+        <option value="dunno">불명</option>
+      </select>
+    </div>
+    {% comment %} 표 {% endcomment %}
+    <div
+      id="5-overload-table"
+      style="margin: 30px; display: none; flex-direction: column"
+    >
+      <div>
+        <input type="text" style="width:100%">
+      </div>
+
+      {% comment %} 사진추가 {% endcomment %}
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 30px">
+          <button id="5-overload-btn" class="btn btn-primary" type="button">
+            사진추가
+          </button>
+        </div>
+
+        <div id="5-overload-images" style="display: none; flex-direction: row">
+          <div class="square">
+            <div class="5-square-inner"></div>
+          </div>
+          <div class="square">
+            <div class="5-square-inner"></div>
+          </div>
+        </div>
+        <button
+          id="5-overload-btn2"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} 사고 {% endcomment %}
+  <div class="main-body-box">
+    {% comment %} 셀렉터 박스 {% endcomment %}
+    <div style="margin: 30px">
+      <select
+        id="6-accident"
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+      >
+        <option selected>사고</option>
+        <option value="yes">유</option>
+        <option value="no">무</option>
+        <option value="dunno">불명</option>
+      </select>
+    </div>
+    {% comment %} 표 {% endcomment %}
+    <div
+      id="6-accident-table"
+      style="margin: 30px; display: none; flex-direction: column"
+    >
+      <div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">사고명</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">사고내용</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">구조물의 손상위치</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">손상정도</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">조치내용</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">현재의 상태</label>
+        </div>        
+      </div>
+
+      {% comment %} 사진추가 {% endcomment %}
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 30px">
+          <button id="6-accident-btn" class="btn btn-primary" type="button">
+            사진추가
+          </button>
+        </div>
+
+        <div id="6-accident-images" style="display: none; flex-direction: row">
+          <div class="square">
+            <div class="6-square-inner"></div>
+          </div>
+          <div class="square">
+            <div class="6-square-inner"></div>
+          </div>
+        </div>
+        <button
+          id="6-accident-btn2"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-body-box">
+    {% comment %} 셀렉터 박스 {% endcomment %}
+    <div style="margin: 30px">
+      <button type="button" class="btn btn-primary btn-lg">저장하기</button>
+      <button type="button" class="btn btn-outline-primary btn-lg">문서생성</button>
+    </div>
+  </div>
+
 </div>
 
 <script
@@ -119,11 +677,138 @@
   $("#1-usagechange").change(function () {
     var value = $(this).val();
     if (value == "yes") {
-        
-        console.log(value)
-        $("#1-usagechange-table").css({display: "flex"})
+      $("#1-usagechange-table").css({ display: "flex" });
+    } else {
+      $("#1-usagechange-table").css({ display: "none" });
     }
   });
+
+  $("#1-usagechange-btn").on("click", function () {
+    $(".1-square-inner").css({ display: "block", "padding-bottom": "80%" });
+    $("#1-usagechange-images").css({ display: "flex" });
+    $("#1-usagechange-btn").css({ display: "none" });
+    $("#1-usagechange-btn2").css({ display: "block" });
+  });
+
+  $("#2-structurechange").change(function () {
+    var value = $(this).val();
+    if (value == "yes") {
+      $("#2-structurechange-table").css({ display: "flex" });
+    } else {
+      $("#2-structurechange-table").css({ display: "none" });
+    }
+  });
+
+  $("#2-structurechange-btn").on("click", function () {
+    $(".2-square-inner").css({ display: "block", "padding-bottom": "80%" });
+    $("#2-structurechange-images").css({ display: "flex" });
+    $("#2-structurechange-btn").css({ display: "none" });
+    $("#2-structurechange-btn2").css({ display: "block" });
+  });
+
+  $("#3-environmentchange").change(function () {
+    var value = $(this).val();
+    if (value == "yes") {
+      $("#3-environmentchange-table").css({ display: "flex" });
+    } else {
+      $("#3-environmentchange-table").css({ display: "none" });
+    }
+  });
+
+  $("#3-environmentchange-btn").on("click", function () {
+    $(".3-square-inner").css({ display: "block", "padding-bottom": "80%" });
+    $("#3-environmentchange-images").css({ display: "flex" });
+    $("#3-environmentchange-btn").css({ display: "none" });
+    $("#3-environmentchange-btn2").css({ display: "block" });
+  });
+
+  $("#4-expansion").change(function () {
+    var value = $(this).val();
+    if (value == "yes") {
+      $("#4-expansion-table").css({ display: "flex" });
+    } else {
+      $("#4-expansion-table").css({ display: "none" });
+    }
+  });
+
+  $("#4-expansion-btn").on("click", function () {
+    $(".4-square-inner").css({ display: "block", "padding-bottom": "80%" });
+    $("#4-expansion-images").css({ display: "flex" });
+    $("#4-expansion-btn").css({ display: "none" });
+    $("#4-expansion-btn2").css({ display: "block" });
+  });
+
+  $("#5-overload").change(function () {
+    var value = $(this).val();
+    if (value == "yes") {
+      $("#5-overload-table").css({ display: "flex" });
+    } else {
+      $("#5-overload-table").css({ display: "none" });
+    }
+  });
+
+  $("#5-overload-btn").on("click", function () {
+    $(".5-square-inner").css({ display: "block", "padding-bottom": "80%" });
+    $("#5-overload-images").css({ display: "flex" });
+    $("#5-overload-btn").css({ display: "none" });
+    $("#5-overload-btn2").css({ display: "block" });
+  });
+  
+  $("#6-accident").change(function () {
+    var value = $(this).val();
+    if (value == "yes") {
+      $("#6-accident-table").css({ display: "flex" });
+    } else {
+      $("#6-accident-table").css({ display: "none" });
+    }
+  });
+
+  $("#6-accident-btn").on("click", function () {
+    $(".6-square-inner").css({ display: "block", "padding-bottom": "80%" });
+    $("#6-accident-images").css({ display: "flex" });
+    $("#6-accident-btn").css({ display: "none" });
+    $("#6-accident-btn2").css({ display: "block" });
+  });
+
+
+  
+
+  function dragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.type === "dragover") {
+      $(e.target).css({ background: "grey" });
+    } else {
+      $(e.target).css({ background: "white" });
+    }
+  }
+
+  function uploadFiles(e) {
+    var target_element = $(e.target);
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.originalEvent.dataTransfer.files.length > 1) {
+      alert("하나만 올리세요");
+      return;
+    } else {
+      imgFile = e.originalEvent.dataTransfer.files;
+      imgFileName = imgFile[0].name;
+      console.log(imgFile[0]);
+      target_element.css({
+        "background-image":
+          "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+      });
+    }
+  }
+
+  $(".square")
+    .on("dragover", dragOver)
+    .on("dragleave", dragOver)
+    .on("drop", uploadFiles);
 </script>
 
 {%endblock%}

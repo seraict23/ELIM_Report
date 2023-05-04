@@ -5,7 +5,7 @@ from .forms import BuilidingForm, CommonForm, ContractForm, BuildingInfoForm, Bu
 from django.shortcuts import render
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from engine.common_gen import Worker
+# from engine.common_gen import Worker
 # Create your views here.
 
 # 경로
