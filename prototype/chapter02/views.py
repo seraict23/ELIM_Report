@@ -7,7 +7,7 @@ from common.models import Common
 import os, sys
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from engine.chapter2 import Worker
+# from engine.chapter2 import Worker
 # Create your views here.
 
 

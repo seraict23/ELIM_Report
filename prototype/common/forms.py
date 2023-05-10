@@ -40,7 +40,7 @@ class ContractForm(forms.Form):
 
 
 class BuildingInfoForm(forms.Form):
-    building_name = forms.CharField(widget=forms.TextInput(
+    building_date = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'id': "floatingInput", "placeholder": "name"}), label="준공일")
     building_address = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'id': "floatingInput", "placeholder": "name"}), label="주소")
