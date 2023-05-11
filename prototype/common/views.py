@@ -3,13 +3,13 @@ import sys
 import os
 from .forms import BuilidingForm, CommonForm, ContractForm, BuildingInfoForm, BuildingCategoryForm
 from django.shortcuts import render
-from .models import Common
+
+from .models import Common, Worker
+from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-# from engine.common_gen import Worker
+from engine.test import Worker as Ace
 # Create your views here.
-
-# 경로
 
 
 def CommonView(req):
@@ -35,32 +35,48 @@ def Cover(req):
     return render(req, "prototype/cover.html")
 
 
+
+
 def Submit(req):
     # sub = Worker(req.POST)
     # sub.start()
 
     print(req.POST)
-
-    Common.objects.create(
-        building_name=req.POST['building_name'],
-        report_date=req.POST['report_date'],
-        building_date=req.POST['building_date'],
-        building_address=req.POST['building_address'],
-        building_category=req.POST['building_category'],
-        contract_joint=req.POST['contract_joint'],
-        contract_method=req.POST['contract_method'],
-        contract_money=req.POST['contract_money'],
-        building_pic=req.POST['building_image'],
-        building_map=req.POST['map_image'],
-    )
-
     return render(req, "common/playground.html")
 
-def Chapter1(req):
-    return render(req, "chapter01/chapter01.html")
 
-def Chapter2(req):
-    return render(req, "chapter02/chapter02.html")
+def WorkerView(req):
+
+    if req.method == 'POST':
+        print(req.POST)
+        row = int(req.POST['worker-length'])
+        building = Common.objects.get(building_name="국민은행여의도본점")
+
+        for i in range(row):
+            Worker.objects.create(
+                job=building,
+                worker_name=req.POST.getlist('worker-'+str(i+1))[0],
+                worker_role=req.POST.getlist('worker-'+str(i+1))[1],
+                worker_class=req.POST.getlist('worker-'+str(i+1))[2],
+                worker_startDate=req.POST.getlist('worker-'+str(i+1))[3],
+            )
+        
+        tableitemlist=[]
+        for i in range(row):
+            tableitemlist.extend(req.POST.getlist('worker-'+str(i+1)))
+        print(tableitemlist)
+        sub = Ace(tableitemlist, row)
+        sub.start()
+
+        return render(req, "common/playground.html")
+        
+    else:
+        building = Common.objects.get(building_name="국민은행여의도본점")
+        report_date = str(building.report_date)
+        context = {'report_date': report_date}
+        return render(req, "common/worker.html", context)
+
+
 
 def Chapter3(req):
     return render(req, "chapter03/chapter03.html")

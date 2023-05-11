@@ -1,6 +1,6 @@
 import win32com.client as win32
 
-from .func import openhwp, fielder, imager, saveAndQuit, appendDict
+from .func import openhwp, fielder, imager, saveAndQuit, appendDict, tableMaker
 
 def intro(dict):
 
@@ -92,6 +92,19 @@ def resultTable(dict):
         hwp = fielder(hwp, mapDict, dict)
 
         saveAndQuit(hwp, "결과표")
+
+    except Exception as e:
+        print(e)
+        hwp.Quit()
+
+
+def workerTable(list, row):
+    hwp = openhwp("참여기술진")
+   
+    try:
+        tableMaker(hwp, 'StartPoint', row, 6, list)
+
+        saveAndQuit(hwp, "참여기술진")
 
     except Exception as e:
         print(e)

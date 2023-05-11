@@ -75,22 +75,29 @@ def appendDict(target:dict, value:dict):
 
 # 표만들기
 def tableMaker(hwp, startField, row, col, list):
-    flag = hwp.MoveToField(startField, False, False, False)
+    hwp.MoveToField(startField, False, False, False)
 
     if row > 1:
         hwp.HAction.GetDefault("TableInsertRowColumn", hwp.HParameterSet.HTableInsertLine.HSet)
         hwp.HParameterSet.HTableInsertLine.Side = hwp.SideType("Bottom")
         hwp.HParameterSet.HTableInsertLine.Count = row-1
         hwp.HAction.Execute("TableInsertRowColumn", hwp.HParameterSet.HTableInsertLine.HSet)
-
+    print(list)
     for i in range(row):
         for j in range(col):
             text = list.pop(0)
+            print(text)
             hwp.HAction.GetDefault("InsertText", hwp.HParameterSet.HInsertText.HSet)
             hwp.HParameterSet.HInsertText.Text = text
             hwp.HAction.Execute("InsertText", hwp.HParameterSet.HInsertText.HSet)
-            hwp.HAction.Run("MoveRight")
+
+            if (j<col-1):
+                hwp.HAction.Run("MoveRight")
             sleep(0.1)
 
+        hwp.HAction.Run("MoveDown")
+        for k in range(col-1):
+            hwp.HAction.Run("MoveLeft")
+            sleep(0.1)
 
     return hwp
