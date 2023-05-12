@@ -42,6 +42,7 @@ def Submit(req):
     # sub.start()
 
     print(req.POST)
+
     return render(req, "common/playground.html")
 
 
@@ -76,6 +77,18 @@ def WorkerView(req):
         context = {'report_date': report_date}
         return render(req, "common/worker.html", context)
 
+
+def Picture(req):
+    if req.method =="POST":
+        print(req.POST)
+
+        
+
+
+
+        return render(req, 'common/partialpicture.html')
+    else:
+        return render(req, 'common/partialpicture.html')
 
 
 def Chapter3(req):

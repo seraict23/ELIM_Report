@@ -7,7 +7,7 @@ from common.models import Common
 import os, sys
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-# from engine.chapter2 import Worker
+from engine.chapter2 import Worker
 # Create your views here.
 
 
@@ -30,7 +30,6 @@ def Temp(req):
     #         date = req.POST[row][5],
     #         note = req.POST[row][6],
     #     )
-
 
 
     # listOfHeads = ['usagechange-length', 'structurechange-length', 'environmentchange', 'expansion-length', 'overload', 'accident']
@@ -73,6 +72,9 @@ def Temp(req):
 
 
     print(paramDict)
+
+    sub = Worker(paramDict)
+    sub.start()
 
     return render(req, "chapter03/chapter03.html")
 

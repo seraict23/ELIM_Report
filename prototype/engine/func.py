@@ -55,6 +55,9 @@ def imager(hwp, fieldName, imgName, width=70.0, height=65.0):
     return hwp
 
 
+
+
+
 def saveAndQuit(hwp, fileName):
     BASE_DIR = Path(__file__).resolve().parent.parent
     PATH = str(BASE_DIR)+"/src/result"
@@ -74,10 +77,10 @@ def appendDict(target:dict, value:dict):
 
 
 # 표만들기
-def tableMaker(hwp, startField, row, col, list):
+def tableMaker(hwp, startField, row, col, list, newRow = True):
     hwp.MoveToField(startField, False, False, False)
 
-    if row > 1:
+    if (row > 1) and (newRow):
         hwp.HAction.GetDefault("TableInsertRowColumn", hwp.HParameterSet.HTableInsertLine.HSet)
         hwp.HParameterSet.HTableInsertLine.Side = hwp.SideType("Bottom")
         hwp.HParameterSet.HTableInsertLine.Count = row-1
@@ -95,9 +98,42 @@ def tableMaker(hwp, startField, row, col, list):
                 hwp.HAction.Run("MoveRight")
             sleep(0.1)
 
-        hwp.HAction.Run("MoveDown")
-        for k in range(col-1):
-            hwp.HAction.Run("MoveLeft")
-            sleep(0.1)
+        if (i<row-1) :
+            hwp.HAction.Run("MoveDown")
+            for k in range(col-1):
+                hwp.HAction.Run("MoveLeft")
+                sleep(0.1)
+
+    return hwp
+
+# 이미지테이블
+def imageTable(hwp, fieldName, imgName, width=70.0, height=65.0):
+    pass
+
+
+def imagerFielder(hwp, fieldName, imgName, width=75.0, height=65.0):
+
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    PATH = str(BASE_DIR)+"/src/pics"
+    
+    print(PATH+"/"+imgName)
+    
+    hwp.MoveToField(fieldName, False, False, False)
+    hwp.InsertPicture(PATH+"/" + imgName, Embedded=True)
+    sleep(1.5)
+    hwp.FindCtrl()
+    hwp.HAction.GetDefault("ShapeObjDialog", hwp.HParameterSet.HShapeObject.HSet)
+
+    # 크기 변경
+    hwp.HParameterSet.HShapeObject.Width = hwp.MiliToHwpUnit(width)
+    hwp.HParameterSet.HShapeObject.Height = hwp.MiliToHwpUnit(height)
+    hwp.HAction.Execute("ShapeObjDialog", hwp.HParameterSet.HShapeObject.HSet)
+
+    # 잘라내서 위치에 붙이기
+    hwp.HAction.Run("Cut")
+    hwp.MoveToField(fieldName, False, True, False)
+
+    hwp.HAction.GetDefault("Paste", hwp.HParameterSet.HSelectionOpt.HSet)
+    hwp.HAction.Execute("Paste", hwp.HParameterSet.HSelectionOpt.HSet)
 
     return hwp

@@ -37,7 +37,7 @@ $("#temporary").on("click", function () {
   if (environmentchange!==0) {
     for (let i = 1; i <=3; i++){
       for (let j = 1; j<=3; j++){
-        fd.append("environmentchange-"+i.toString(), $("input[name=3-"+i.toString()+"-"+j.toString()+"]"))
+        fd.append("environmentchange-"+i.toString(), $("input[name=3-"+i.toString()+"-"+j.toString()+"]").val())
       }
     }
   }
@@ -199,11 +199,9 @@ $("#3-environmentchange").change(function () {
   if (value == "yes") {
     $("#3-environmentchange-table").css({ display: "flex" });
     environmentchange=3;
-    alert('hi')
   } else {
     $("#3-environmentchange-table").css({ display: "none" });
     environmentchange=0;
-    alert('rehi')
   }
 });
 
@@ -271,11 +269,17 @@ $("#6-accident-btn").on("click", function () {
 function dragOver(e) {
   e.stopPropagation();
   e.preventDefault();
-  if (e.type === "dragover") {
-    $(e.target).css({ background: "grey" });
+
+  var bgvalue = $(e.target).css("background-color");
+  if(bgvalue === "rgb(129, 129, 129)") {
   } else {
-    $(e.target).css({ background: "white" });
+    if (e.type === "dragover") {
+      $(e.target).css({ background: "grey" });
+    } else {
+      $(e.target).css({ background: "white" });    
+    }
   }
+
 }
 
 function uploadFiles(e) {
@@ -288,13 +292,13 @@ function uploadFiles(e) {
   } else {
     imgFile = e.originalEvent.dataTransfer.files;
     imgFileName = imgFile[0].name;
-    console.log(imgFile[0]);
     target_element.css({
       "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
       outline: "none",
       "background-size": "100%",
       "background-repeat": "no-repeat",
       "background-position": "center",
+      "background-color":"rgb(129, 129, 129)"
     });
   }
 }

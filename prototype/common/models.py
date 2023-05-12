@@ -61,5 +61,8 @@ class Worker(models.Model):
         return self.worker_name
 
 
-# class Pics():
-#     pass
+# class Pics(models.Model):
+#     id = models.IntegerField(primary_key=True)
+#     fileName = models.CharField(max_length=64)
+#     filePath = models.CharField(max_length=128)
+#     content = models.CharField(max_length=64)
