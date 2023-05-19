@@ -164,10 +164,10 @@
           style="display: none; flex-direction: row"
         >
           <div class="square">
-            <div class="1-square-inner"></div>
+            <div class="1-square-inner" name="1-usagechange-pic1"></div>
           </div>
           <div class="square">
-            <div class="1-square-inner"></div>
+            <div class="1-square-inner" name="1-usagechange-pic2"></div>
           </div>
         </div>
         <button
@@ -262,10 +262,10 @@
           style="display: none; flex-direction: row"
         >
           <div class="square">
-            <div class="2-square-inner"></div>
+            <div class="2-square-inner" name="2-structurechange-pic1"></div>
           </div>
           <div class="square">
-            <div class="2-square-inner"></div>
+            <div class="2-square-inner" name="2-structurechange-pic2"></div>
           </div>
         </div>
         <button
@@ -368,10 +368,10 @@
           style="display: none; flex-direction: row"
         >
           <div class="square">
-            <div class="3-square-inner"></div>
+            <div class="3-square-inner" name="3-environmentchange-pic1"></div>
           </div>
           <div class="square">
-            <div class="3-square-inner"></div>
+            <div class="3-square-inner" name="3-environmentchange-pic2"></div>
           </div>
         </div>
         <button
@@ -491,10 +491,10 @@
 
         <div id="4-expansion-images" style="display: none; flex-direction: row">
           <div class="square">
-            <div class="4-square-inner"></div>
+            <div class="4-square-inner" name="4-expansion-pic1"></div>
           </div>
           <div class="square">
-            <div class="4-square-inner"></div>
+            <div class="4-square-inner" name="4-expansion-pic1"></div>
           </div>
         </div>
         <button
@@ -544,10 +544,10 @@
 
         <div id="5-overload-images" style="display: none; flex-direction: row">
           <div class="square">
-            <div class="5-square-inner"></div>
+            <div class="5-square-inner" name="5-overload-pic1"></div>
           </div>
           <div class="square">
-            <div class="5-square-inner"></div>
+            <div class="5-square-inner" name="5-overload-pic2"></div>
           </div>
         </div>
         <button
@@ -619,10 +619,10 @@
 
         <div id="6-accident-images" style="display: none; flex-direction: row">
           <div class="square">
-            <div class="6-square-inner"></div>
+            <div class="6-square-inner" name="6-accident-pic1"></div>
           </div>
           <div class="square">
-            <div class="6-square-inner"></div>
+            <div class="6-square-inner" name="6-accident-pic2"></div>
           </div>
         </div>
         <button
@@ -640,7 +640,7 @@
   <div class="main-body-box">
     {% comment %} 셀렉터 박스 {% endcomment %}
     <div style="margin: 30px">
-      <form action="{% url 'common:chapter3' %}">
+      <form action="{% url 'chapter3:chapter3' %}">
         <input id="submit-button" type="submit" class="btn btn-primary btn-lg" value="저장하기"></button>
       </form>
       <button id="temporary" type="button" class="btn btn-outline-primary btn-lg">문서생성</button>

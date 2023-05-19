@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "chapter03",
     "chapter02",
     "engineer_db",
     "common",

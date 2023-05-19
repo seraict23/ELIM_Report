@@ -1,4 +1,5 @@
 {%extends 'common/base.html'%} {% block CSS %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
 <style>
   .main-body-container {
     width: 800px;
@@ -19,10 +20,24 @@
     display: block;
     padding: 30%;
   }
+  .nav-item{
+    display:flex;
+    flex-direction:row
+  }
   .nav-link {
     text-decoration: none;
     color: inherit;
+    display:flex;
+    flex-direction:row;
   }
+  .nav-inner {    
+    cursor: pointer;
+  }
+  .material-symbols-rounded {
+    color:green;
+    cursor:pointer;
+  }
+  
 </style>
 
 {% endblock %} {% block BODY %}
@@ -34,14 +49,14 @@
       <ul class="nav nav-tabs" style="margin-bottom: 10px">
         <div id="nav-add-position" style="display: flex; flex-direction: row">
           <li class="nav-item">
-            <button class="nav-link active" aria-current="page" id="nav-btn-1">
-              1페이지
-            </button>
+            <a class="nav-link active" aria-current="page" id="nav-btn-1">
+              <span class="nav-inner">1페이지</span><img/>
+            </a>
           </li>
         </div>
 
         <li class="nav-item">
-          <button class="nav-link" id="nav-add">사진 추가</button>
+          <a class="nav-link" id="nav-add">사진 추가</a>
         </li>
       </ul>
 

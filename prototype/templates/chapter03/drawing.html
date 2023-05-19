@@ -1,0 +1,62 @@
+{%extends 'chapter03/base_drawing.html'%} {%block CSS%}
+
+<style>
+  .main {
+    display: flex;
+    justify-content: initial;
+    background-color: grey;
+  }
+  .img-box {
+    margin: 50px;
+  }
+</style>
+
+{%endblock%} {%block BODY%}
+<div class="main">
+  <div class="img-box" id="drawing">
+    <img src="/static/1.jpg" />
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  $.ajaxSetup({
+    headers: { "X-CSRFToken": "{{csrf_token}}" },
+  });
+</script>
+
+<script>
+  let formData = new FormData();
+  var test = $("#drawing");
+  test.on("click", function (event) {
+    const x = event.pageX;
+    const y = event.pageY;
+    const answer = confirm("여기에 포인트를 생성합니까?");
+    if (answer) {
+      formData.append("x", x);
+      formData.append("y", y);
+      $.ajax({
+        url: "/chapter3/drawing/",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: () => {
+          console.log("성공");
+        },
+        error: (req, status, err) => {
+          console.log(err);
+        },
+        complete: () => {
+          console.log("완료");
+        },
+      });
+    }
+  });
+</script>
+{%endblock%}

@@ -66,3 +66,4 @@ class Worker(models.Model):
 #     fileName = models.CharField(max_length=64)
 #     filePath = models.CharField(max_length=128)
 #     content = models.CharField(max_length=64)
+#     hashname = models.CharField(max_length=64)

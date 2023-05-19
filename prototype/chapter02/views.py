@@ -73,8 +73,36 @@ def Temp(req):
 
     print(paramDict)
 
-    sub = Worker(paramDict)
-    sub.start()
+
+
+
+    # 이미지 처리 list > table 이 아니라 그냥 하나씩?
+    print(req.POST)
+    if '1-usagechange-pic1' in req.POST:
+        paramDict['pic-1']=[]
+        paramDict['pic-1'].append(req.POST['1-usagechange-pic1'])
+        paramDict['pic-1'].append(req.POST['1-usagechange-pic2'] if '1-usagechange-pic2' in req.POST else 'default.jpg')
+    else :
+        print("NOT 1-usagechange-pic1 in req.POST")
+
+    if '2-structurechange-pic1' in req.POST:
+        paramDict['pic-2']=[]
+        paramDict['pic-2'].append(req.POST['2-structurechange-pic1'])
+        paramDict['pic-2'].append(req.POST['2-structurechange-pic2'] if '2-structurechange-pic2' in req.POST else 'default.jpg')
+    else : 
+        print("NOT 2-structurechange-pic1 in req.POST")
+
+    if '3-environmentchange-pic1' in req.POST:
+        paramDict['pic-3']=[]
+        paramDict['pic-3'].append(req.POST['3-environmentchange-pic1'])
+        paramDict['pic-3'].append(req.POST['3-environmentchange-pic2'] if '3-environmentchange-pic2' in req.POST else 'default.jpg')
+    else : 
+        print("NOT 3-environmentchange-pic1 in req.POST")
+
+
+    # sub = Worker(paramDict)
+    # sub.start()
+
 
     return render(req, "chapter03/chapter03.html")
 

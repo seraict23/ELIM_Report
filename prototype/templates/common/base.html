@@ -18,6 +18,11 @@
       rel="stylesheet"
     />
 
+    {% comment %} <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    /> {% endcomment %}
+
     <style>
       .main-body {
         display: flex;
@@ -68,21 +73,16 @@
             <li class="nav-item">
               {% if request.get_full_path == "/worker/" %}
               <a class="nav-link active" href="{% url 'common:worker' %}"
-                >로동자</a
-              >
+                >로동자</a>
               {%else%}
               <a class="nav-link" href="{% url 'common:worker' %}">로동자</a>
               {%endif%}
             </li>
             <li class="nav-item">
               {% if request.get_full_path == "/picture/" %}
-              <a class="nav-link active" href="{% url 'common:picture' %}"
-                >부위별사진</a
-              >
+              <a class="nav-link active" href="{% url 'common:picture' %}">부위별사진</a>
               {%else%}
-              <a class="nav-link" href="{% url 'common:picture' %}"
-                >부위별사진</a
-              >
+              <a class="nav-link" href="{% url 'common:picture' %}">부위별사진</a>
               {%endif%}
             </li>
             <li class="nav-item">
@@ -98,11 +98,11 @@
             </li>
             <li class="nav-item">
               {% if request.get_full_path == "/chapter3/" %}
-              <a class="nav-link active" href="{% url 'common:chapter3' %}"
+              <a class="nav-link active" href="{% url 'chapter3:chapter3' %}"
                 >3장 현황조사</a
               >
               {%else%}
-              <a class="nav-link" href="{% url 'common:chapter3' %}"
+              <a class="nav-link" href="{% url 'chapter3:chapter3' %}"
                 >3장 현황조사</a
               >
               {%endif%}

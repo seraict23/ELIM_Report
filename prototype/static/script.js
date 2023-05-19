@@ -5,9 +5,10 @@ let expansion_row=0;
 let overload=0;
 let accident=0;
 
-$("#temporary").on("click", function () {
-  let fd = new FormData();
+let fd = new FormData();
 
+
+$("#temporary").on("click", function () {
   fd.append("usagechange-length", usagechange_row)
   if(usagechange_row !== 0) {
     for (let i = 1; i <= usagechange_row; i++) {
@@ -85,7 +86,7 @@ $("#temporary").on("click", function () {
   });
 });
 
-// 1.용도변경; 테이블 향 추가 및 동적 할당
+// 1.용도변경; 테이블 행 추가 및 동적 할당
 $("#1-usagechange-appendrow-button").on("click", () => {
   usagechange_row++;
   const row = usagechange_row
@@ -156,6 +157,7 @@ $("#4-expansion-appendrow-button").on("click", () => {
     '</div>'
   );
 });
+
 
 /* Checkbox change event */
 $("#1-usagechange").change(function () {
@@ -271,15 +273,22 @@ function dragOver(e) {
   e.preventDefault();
 
   var bgvalue = $(e.target).css("background-color");
-  if(bgvalue === "rgb(129, 129, 129)") {
+
+  // if ($(e.target).css("background-image")) {
+  //   console.log("있다")
+  // } else {
+  //   console.log("없다")
+  // }
+
+  if (bgvalue === "rgb(167, 238, 250)") {
+    // console.log(bgvalue);
   } else {
     if (e.type === "dragover") {
-      $(e.target).css({ background: "grey" });
+      $(e.target).css({ background: "rgb(167, 238, 255)" });
     } else {
-      $(e.target).css({ background: "white" });    
+      $(e.target).css({ background: "white" });
     }
   }
-
 }
 
 function uploadFiles(e) {
@@ -292,13 +301,19 @@ function uploadFiles(e) {
   } else {
     imgFile = e.originalEvent.dataTransfer.files;
     imgFileName = imgFile[0].name;
+
+    // 파일명 데이터에 추가
+    var nametag = target_element.attr("name");
+    console.log(nametag)
+    fd.set(nametag, imgFileName);
+
     target_element.css({
       "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
       outline: "none",
       "background-size": "100%",
       "background-repeat": "no-repeat",
       "background-position": "center",
-      "background-color":"rgb(129, 129, 129)"
+      "background-color":"rgb(167, 238, 250)"
     });
   }
 }

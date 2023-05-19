@@ -1,22 +1,108 @@
 {%extends 'common/base.html'%} {% block CSS %}
 <style>
-  .main-body-container {
-    width: 800px;
+  .main-body-container-wider {
+    width: 1000px;
     height: 100%;
-    margin-right: 300px;
+    margin-right: 430px;
   }
   .main-body-box {
     border: solid 1px grey;
     background-color: rgba(240, 249, 254, 1);
     margin-bottom: 20px;
   }
+  .row {
+    font-size:0.8rem;
+    margin:6px 0px;
+  }
 </style>
 
 {% endblock %} {% block BODY %}
 
-<div class="main-body-container">
+<div class="main-body-container-wider">
   <div class="main-body-box">
-    <div style="margin: 30px"> nothing is here </div>
+    <div style="margin: 30px">
+      <div class="mb-3">
+        <label for="formFile" class="form-label">엑셀 파일을 선택하세요</label>
+        <input class="form-control" type="file" id="formFile" />
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:row;margin: 30px">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-success" id="submit">
+              엑셀 불러오기
+            </button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-secondary" id="delete">
+              삭제하기
+            </button>
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-info" id="view">
+              한글문서<br>
+              생성하기
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+
+    <div style="margin: 30px; display: flex" id="status-table">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">위치</div>
+          <div class="col">구분</div>
+          <div class="col">부위</div>
+          <div class="col">부재</div>
+          <div class="col">유형 및 형상</div>
+          <div class="col">폭</div>
+          <div class="col">길이, 면적</div>
+          <div class="col">개소</div>
+          <div class="col">진행상황</div>
+          <div class="col">비고</div>
+          <div class="col">발생원인</div>
+          <div class="col">사진번호</div>
+        </div>
+        {%for i in statustable%}
+        <div class="row">
+          <div class="col">{{i.location}}</div>
+          <div class="col">{{i.number}}</div>
+          <div class="col">{{i.part}}</div>
+          <div class="col">{{i.material}}</div>
+          <div class="col">{{i.shapeType}}</div>
+          <div class="col">{{i.width}}</div>
+          <div class="col">{{i.LengthArea}}</div>
+          <div class="col">{{i.each}}</div>
+          <div class="col">{{i.progress}}</div>
+          <div class="col">{{i.note}}</div>
+          <div class="col">{{i.cause}}</div>
+          <div class="col">{{i.photoNumber}}</div>
+        </div>
+        {%endfor%}
+      </div>
+    </div>
+
+    <div
+      style="display: none; justify-content: center; margin: 30px"
+      id="loading"
+    >
+      <div style="display: flex; flex-direction: column">
+        <p>로딩 중...</p>
+
+        <div class="spinner-border text-info" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -27,9 +113,72 @@
 ></script>
 
 <script>
-    $("#temporary").on("click", function() {
-        alert("아직 미구현 기능입니다.")
+  $.ajaxSetup({
+    headers: { "X-CSRFToken": "{{csrf_token}}" },
+  });
+</script>
+
+<script>
+  var formData = new FormData();
+
+  $("#delete").on("click", () => {
+    $.ajax({
+      url: "/chapter3/cleardata/",
+      method: "GET",
+      success: () => {
+        console.log("성공");
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
     })
+  })
+
+  $("#view").on("click", () => {
+    $.ajax({
+      url: "/chapter3/viewdata/",
+      method: "GET",
+      success: () => {
+        console.log("성공");
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    })
+  })
+
+  $("#submit").on("click", () => {
+    var target = $("#formFile");
+    
+    $("#loading").css({ display: "flex" });
+    $("#status-table").css({ display: "none" });
+    // console.log(target[0].files[0].name)
+    var fileName = target[0].files[0].name;
+    formData.append("excelFile", fileName);
+
+    $.ajax({
+      url: "/chapter3/exceldata/",
+      data: formData,
+      processData: false,
+      contentType: false,
+      method: "POST",
+      success: () => {
+        console.log("성공");
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    });
+  });
 </script>
 
 {% endblock %}

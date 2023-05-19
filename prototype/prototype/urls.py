@@ -20,5 +20,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("common.urls")),
     path("chapter2/", include("chapter02.urls")),
+    path("chapter3/", include("chapter03.urls")),
     path("info/", include("engineer_db.urls"))
 ]

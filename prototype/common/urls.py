@@ -8,5 +8,4 @@ urlpatterns = [
     path("submit/", views.Submit, name="submit"),
     path("picture/", views.Picture, name="picture"),
     path("worker/", views.WorkerView , name="worker"),
-    path("chapter3/", views.Chapter3 , name="chapter3")
 ]

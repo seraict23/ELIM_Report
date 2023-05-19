@@ -4,7 +4,7 @@ import win32com.client as win32
 import threading
 import pythoncom
 
-from .func import openhwp, fielder, saveAndQuit, tableMaker
+from .func import openhwp, fielder, saveAndQuit, tableMaker, imageTable
 
 
 class Worker(threading.Thread):
@@ -66,6 +66,12 @@ class Worker(threading.Thread):
             list = dict['environmentchange-list']
 
             hwp = tableMaker(hwp, 'startpoint3', row, 3, list, False)
+
+
+
+            # 이미지 처리
+            pic1table = dict['pic-1']
+            hwp = imageTable(hwp, 'pic-1', pic1table)
 
 
             saveAndQuit(hwp, "테스트용임시저장3")
