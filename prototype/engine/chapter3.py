@@ -7,7 +7,7 @@ import threading
 import pythoncom
 
 
-from .func import openhwp, fielder, saveAndQuit, imageTable, tableMaker_list2d, merger, imagerFielder, tableMaker_1Line, tableMaker_titleLine
+from .func import openhwp, fielder, saveAndQuit, tableMaker_list2d, merger, imagerFielder, tableMaker_1Line, tableMaker_titleLine
 
 
 class Worker(threading.Thread):

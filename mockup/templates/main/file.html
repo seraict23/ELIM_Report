@@ -1,0 +1,545 @@
+{%extends 'main/base.html'%} {% block CSS %}
+
+<!-- date picker css -->
+<link
+  rel="stylesheet"
+  href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+/>
+{% comment %} <link rel="stylesheet" href="/resources/demos/style.css" />
+{% endcomment %}
+
+<style>
+  .table {
+    display: flex;
+    flex-direction: column;
+  }
+  .table > :not(caption) > * > * {
+    padding: 0;
+  }
+
+  .input-in-grid {
+    display: block;
+    width: 100%;
+    border: none;
+    margin: 0;
+    border: dotted 1px grey;
+    padding: 5px;
+  }
+
+  .square {
+    width: 50%;
+    position: relative;
+    border: 1px solid grey;
+  }
+  .square:after {
+    content: "";
+    display: flex;
+    padding-bottom: 80%;
+  }
+</style>
+
+{% endblock %} {% block BODY %}
+
+<div class="body-content">
+  <!--기본정보-->
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>기본정보</h5>
+    </div>
+
+    <div class="form-floating mb-3">
+      {% if basic.basic_name == '임시'%}
+      <input
+        type="text"
+        class="form-control"
+        id="basic_name"
+        placeholder="name@example.com"
+        value=""
+      />
+      {%else%}
+      <input
+        type="text"
+        class="form-control"
+        id="basic_name"
+        placeholder="name@example.com"
+        value="{{basic.basic_name}}"
+      />
+      {% endif %}
+      <label for="basic_name">건축물명</label>
+    </div>
+    <div class="form-floating mb-3">
+      {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
+      <input
+        type="text"
+        class="form-control"
+        id="basic_startAt"
+        placeholder="name@example.com"
+        value=""
+      />
+
+      {% else %}
+      <input
+        type="text"
+        class="form-control"
+        id="basic_startAt"
+        placeholder="name@example.com"
+        value="{{basic.basic_startAt|date:'Y-m-d'}}"
+      />
+      {% endif %}
+      <!-- DateTimePicker 위젯를 적용하기 위한 TextBox를 선언한다. -->
+
+      <label for="basic_startAt">시작일</label>
+    </div>
+    <div class="form-floating mb-3">
+      {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
+      <input
+        type="text"
+        class="form-control"
+        id="basic_endAt"
+        placeholder="name@example.com"
+        value=""
+      />
+      {%else%}
+      <input
+        type="text"
+        class="form-control"
+        id="basic_endAt"
+        placeholder="name@example.com"
+        value="{{basic.basic_endAt|date:'Y-m-d'}}"
+      />
+      {%endif%}
+      <label for="basic_endAt">종료일</label>
+    </div>
+  </div>
+
+  <!--파일입력-->
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>파일 입력</h5>
+    </div>
+    <div class="input-group">
+      <input
+        type="file"
+        class="form-control"
+        id="file_name_BML"
+        aria-describedby="inputGroupFileAddon04"
+        aria-label="Upload"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        id="inputGroupFileAddon01"
+      >
+      <a href="{% url 'main:fileload' basic.id %}"
+      >자료준비</a>
+      </button>
+    </div>
+    <div class="input-group">
+      <input
+        type="file"
+        class="form-control"
+        id="file_name_FML"
+        aria-describedby="inputGroupFileAddon04"
+        aria-label="Upload"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        id="inputGroupFileAddon02"
+      >
+        Button
+      </button>
+    </div>
+    <div class="input-group">
+      <input
+        type="file"
+        class="form-control"
+        id="file_name_EXCEL"
+        aria-describedby="inputGroupFileAddon04"
+        aria-label="Upload"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        id="inputGroupFileAddon03"
+      >
+        Button
+      </button>
+    </div>
+    <div class="input-group">
+      <input
+        type="file"
+        class="form-control"
+        id="file_name_DWG"
+        aria-describedby="inputGroupFileAddon04"
+        aria-label="Upload"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        id="inputGroupFileAddon04"
+      >
+        Button
+      </button>
+    </div>
+  </div>
+
+  <!--전경사진-->
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>전경사진 및 약도</h5>
+    </div>
+    <div style="display: flex; flex-direction: row">
+      <div class="square" id="map_titlePic">
+        <div class="square-inner" name="map_titlePic" >전경사진</div>
+      </div>
+      <div class="square" id="map_map">
+        <div class="square-inner" name="map_map">약도</div>
+      </div>
+    </div>
+  </div>
+
+  <!--참여기술진-->
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>참여 기술진</h5>
+    </div>
+    <div class="table">
+      <div class="container text-center" style="border: solid 1px grey">
+        <div class="row">
+          <div class="col"><div class="input-in-grid">구분</div></div>
+          <div class="col"><div class="input-in-grid">성명</div></div>
+          <div class="col"><div class="input-in-grid">자격</div></div>
+          <div class="col"><div class="input-in-grid">참여기간</div></div>
+          <div class="col"><div class="input-in-grid">참여현황</div></div>
+          <div class="col"><div class="input-in-grid">비고</div></div>
+        </div>
+        <!-- 입력 -->
+        {% for i in worker %}
+        <div class="row">
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="{{forloop.counter}}-1"
+              value="{{i.worker_role}}"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="{{forloop.counter}}-2"
+              value="{{i.worker_name}}"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="{{forloop.counter}}-3"
+              value="{{i.worker_class}}"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="{{forloop.counter}}-4"
+              data-id="worker_period"
+              value="{{i.worker_period}}"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="{{forloop.counter}}-5"
+              value="{{i.worker_job}}"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="{{forloop.counter}}-6"
+              value="{{i.worker_note}}"
+            />
+          </div>
+        </div>
+        {% empty %}
+        <div class="row">
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="1-1"
+              value="책임기술자"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input class="input-in-grid" type="text" name="1-2" value="" />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input class="input-in-grid" type="text" name="1-3" value="" />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="1-4"
+              data-id="worker_period"
+              value=""
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input
+              class="input-in-grid"
+              type="text"
+              name="1-5"
+              value="보고서 검토 및 현장책임"
+            />
+          </div>
+          <div class="col" style="padding: 0px">
+            <input class="input-in-grid" type="text" name="1-6" value="" />
+          </div>
+        </div>
+        {%endfor%}
+        <div id="worker-appendrow"></div>
+        <span id="worker-appendrow-button" class="material-symbols-outlined">
+          add
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-content-box">
+    <button type="button" class="btn btn-primary btn-lg" id="save_button">
+      저장하기
+    </button>
+    <button type="button" class="btn btn-secondary btn-lg">생성하기</button>
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"
+></script>
+
+<!--date picker js-->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+    $.ajaxSetup({
+      headers: { "X-CSRFToken": "{{csrf_token}}" },
+    });
+
+    // new file or new picture
+    let newFile1 = false;
+    let newFile2 = false;
+    let newFile3 = false;
+    let newFile4 = false;
+    let newPic1 = false;
+    let newPic2 = false;
+    let fd = new FormData()
+
+    $(function () {
+      $("#basic_startAt").datepicker({
+        dateFormat: "yy-mm-dd",
+        monthNames: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ]
+      });
+    });
+
+    $(function () {
+      $("#basic_endAt").datepicker({
+        dateFormat: "yy-mm-dd",
+        monthNames: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ]
+      });
+    });
+
+    let startAt = ""
+    let endAt = ""
+
+    $("#basic_startAt").on('change', (e) => {
+      startAt = $(e.target).val();
+      $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt)
+    })
+
+    $("#basic_endAt").on('change', (e) => {
+      endAt = $(e.target).val();
+      $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt)
+    })
+
+    {% if worker|length > 0 %}
+    let row = {{worker|length}}
+    {% else %}
+    let row = 1;
+    {% endif %}
+    $("#worker-appendrow-button").on("click", () => {
+      row++;
+      $("#worker-appendrow").append(
+        '<div class="row">' +
+          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+          row.toString() +
+          '-1" value="참여기술자"></div>' +
+          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+          row.toString() +
+          '-2"></div>' +
+          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+          row.toString() +
+          '-3"></div>' +
+          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+          row.toString() +
+          '-4" data-id="worker_period" value="'+startAt.toString()+' ~ '+endAt.toString()+'"></div>' +
+          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+          row.toString() +
+          '-5" value="보고서 작성 및 현장조사"></div>' +
+          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+          row.toString() +
+          '-6"></div>' +
+          "</div>"
+      );
+    });
+    
+
+    $("#save_button").on("click", () => {
+      const basic_id={{ basic.id }}
+
+      // 기초정보
+      fd.append('basic_id', {{basic.id}})
+      fd.append('basic_name', $("#basic_name").val())
+      fd.append('basic_startAt', $("#basic_startAt").val())
+      fd.append('basic_endAt', $("#basic_endAt").val())
+
+      // 파일명
+
+
+      // 참여기술자
+      fd.append("worker-length", row.toString());
+      for (let i = 1; i <= row; i++) {
+        for (let j = 1; j <= 6; j++)
+          fd.append(
+            "worker-" + i.toString() + "-" + j.toString(),
+            $("input[name=" + i.toString() + "-" + j.toString() + "]").val()
+          );
+      }
+
+      $.ajax({
+        url: "/main/"+basic_id.toString()+"/file/",
+        data: fd,
+        method: "POST",
+        processData: false,
+        contentType: false,
+        success: (response) => {
+          console.log("성공");
+          // 서버 응답 데이터에서 리디렉션 URL 추출
+          var redirectUrl = response.redirect_url;
+          console.log(redirectUrl)
+          // 리디렉션 수행
+          window.location.href = redirectUrl;
+        },
+        error: (req, status, err) => {
+          console.log(err);
+        },
+        complete: () => {
+          console.log("완료");
+        },
+      })
+    })
+
+
+  // 이미지 입력
+  $(document).ready(() => { 
+    if ("{{map.map_titlePic_path}}" !== "-") {
+      const map_titlePic_path = "{{map.map_titlePic_path}}"
+      $("#map_titlePic").css({
+        "background-image": "url("+"'"+map_titlePic_path+"'"+")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      })
+    }
+
+    if ("{{map.map_map_path}}" !== "-") {
+      const map_map_path = "{{map.map_map_path}}"
+      $("#map_map").css({
+        "background-image": "url("+"'"+map_map_path+"'"+")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      })
+    }
+  })
+
+  $(".input-group").on("change", ".form-control", (e) => {
+    var filename = $(e.target).val().split('\\')[2]
+    var idtag = $(e.target).attr("id")
+    console.log(filename, idtag)
+    fd.append(idtag, filename)
+  })
+
+  function dragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    var bgvalue = $(e.target).css("background-color");
+
+    // 무조건 있다로 나옴;;
+    // if ($(e.target).css("background-image")) {
+    //   console.log("있다")
+    // } else {
+    //   console.log("없다")
+    // }
+
+    if (bgvalue === "rgb(167, 238, 250)") {
+      // console.log(bgvalue);
+    } else {
+      if (e.type === "dragover") {
+        $(e.target).css({ background: "rgb(167, 238, 255)" });
+      } else {
+        $(e.target).css({ background: "white" });
+      }
+    }
+  }
+
+  function uploadFiles(e) {
+    var target_element = $(e.target);
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.originalEvent.dataTransfer.files.length > 1) {
+      alert("하나만 올리세요");
+      return;
+    } else {
+      var imgFile = e.originalEvent.dataTransfer.files;
+      var imgFileName = imgFile[0].name;
+      console.log(imgFile[0]);
+      target_element.html("");
+      var idtag = target_element.attr("id");
+      console.log(idtag)
+
+      // 파일명 데이터에 추가
+      fd.set(idtag, imgFileName);
+
+      target_element.css({
+        "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      });
+    }
+  }
+
+  $(".square")
+    .on("dragover", dragOver)
+    .on("dragleave", dragOver)
+    .on("drop", uploadFiles);
+</script>
+
+{% endblock %}

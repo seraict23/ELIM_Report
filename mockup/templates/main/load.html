@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SERA ICT</title>
+  </head>
+  <body>
+    <ul class="list-group">
+      {% for i in contract %} {% if i.contract_name != '임시' %}
+      <li class="list-group-item" aria-current="true">
+        {{i.contract_name}}
+      </li>
+      {%endif%} {%endfor%}
+    </ul>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $.ajaxSetup({
+        headers: { "X-CSRFToken": "{{csrf_token}}" },
+      });
+
+      $(document).on("click", ".list-group-item", (e) => {
+        const contract_name = e.target.innerText;
+        console.log(contract_name)
+        let fd = new FormData();
+        fd.append("contract_name", contract_name);
+
+        $.ajax({
+          url: "/main/load/",
+          data: fd,
+          method: "POST",
+          processData: false,
+          contentType: false,
+          success: (response) => {
+            console.log("성공");
+            // 서버 응답 데이터에서 리디렉션 URL 추출
+            var redirectUrl = response.redirect_url;
+            console.log(redirectUrl);
+            // 리디렉션 수행
+            window.location.href = redirectUrl;
+          },
+          error: (req, status, err) => {
+            console.log(err);
+          },
+          complete: () => {
+            console.log("완료");
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
