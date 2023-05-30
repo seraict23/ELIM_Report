@@ -26,6 +26,12 @@
     padding: 5px;
   }
 
+  .file-input-label {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .square {
     width: 50%;
     position: relative;
@@ -43,72 +49,157 @@
 <div class="body-content">
   <!--기본정보-->
   <div class="body-content-box">
-    <div class="body-content-box-label">
+    <div
+      class="body-content-box-label"
+      style="display: flex; flex-direction: row; justify-content: space-between"
+    >
       <h5>기본정보</h5>
+      <input id="appear_button" type="submit" value="수정하기" />
     </div>
 
-    <div class="form-floating mb-3">
-      {% if basic.basic_name == '임시'%}
-      <input
-        type="text"
-        class="form-control"
-        id="basic_name"
-        placeholder="name@example.com"
-        value=""
-      />
-      {%else%}
-      <input
-        type="text"
-        class="form-control"
-        id="basic_name"
-        placeholder="name@example.com"
-        value="{{basic.basic_name}}"
-      />
-      {% endif %}
-      <label for="basic_name">건축물명</label>
-    </div>
-    <div class="form-floating mb-3">
-      {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
-      <input
-        type="text"
-        class="form-control"
-        id="basic_startAt"
-        placeholder="name@example.com"
-        value=""
-      />
+    <div id="hidden_or_appear" style="display: none">
+      <div class="form-floating mb-3">
+        {% if basic.basic_name == '임시'%}
+        <input
+          type="text"
+          class="form-control"
+          id="basic_name"
+          placeholder="name@example.com"
+          value=""
+        />
+        {%else%}
+        <input
+          type="text"
+          class="form-control"
+          id="basic_name"
+          placeholder="name@example.com"
+          value="{{basic.basic_name}}"
+        />
+        {% endif %}
+        <label for="basic_name">건축물명</label>
+      </div>
+      <div class="form-floating mb-3">
+        {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
+        <input
+          type="text"
+          class="form-control"
+          id="basic_startAt"
+          placeholder="name@example.com"
+          value=""
+        />
 
-      {% else %}
-      <input
-        type="text"
-        class="form-control"
-        id="basic_startAt"
-        placeholder="name@example.com"
-        value="{{basic.basic_startAt|date:'Y-m-d'}}"
-      />
-      {% endif %}
-      <!-- DateTimePicker 위젯를 적용하기 위한 TextBox를 선언한다. -->
+        {% else %}
+        <input
+          type="text"
+          class="form-control"
+          id="basic_startAt"
+          placeholder="name@example.com"
+          value="{{basic.basic_startAt|date:'Y-m-d'}}"
+        />
+        {% endif %}
+        <!-- DateTimePicker 위젯를 적용하기 위한 TextBox를 선언한다. -->
 
-      <label for="basic_startAt">시작일</label>
+        <label for="basic_startAt">시작일</label>
+      </div>
+      <div class="form-floating mb-3">
+        {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
+        <input
+          type="text"
+          class="form-control"
+          id="basic_endAt"
+          placeholder="name@example.com"
+          value=""
+        />
+        {%else%}
+        <input
+          type="text"
+          class="form-control"
+          id="basic_endAt"
+          placeholder="name@example.com"
+          value="{{basic.basic_endAt|date:'Y-m-d'}}"
+        />
+        {%endif%}
+        <label for="basic_endAt">종료일</label>
+      </div>
     </div>
-    <div class="form-floating mb-3">
-      {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
-      <input
-        type="text"
-        class="form-control"
-        id="basic_endAt"
-        placeholder="name@example.com"
-        value=""
-      />
-      {%else%}
-      <input
-        type="text"
-        class="form-control"
-        id="basic_endAt"
-        placeholder="name@example.com"
-        value="{{basic.basic_endAt|date:'Y-m-d'}}"
-      />
-      {%endif%}
-      <label for="basic_endAt">종료일</label>
+  </div>
+
+  <!--계약정보-->
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>계약정보</h5>
+    </div>
+
+    <div class="container text-center">
+      <!--용역명-->
+      <div class="row">
+        <div class="col">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="contract_name"
+              placeholder="name@example.com"
+              value="{{contract.contract_name}}"
+            />
+            <label for="contract_name">용역명</label>
+          </div>
+        </div>
+      </div>
+      <!--공동수급, 계약방법-->
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="contract_joint"
+              placeholder="name@example.com"
+              value="{{contract.contract_joint}}"
+            />
+            <label for="contract_joint">공동수급</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="contract_method"
+              placeholder="name@example.com"
+              value="{{contract.contract_method}}"
+            />
+            <label for="contract_method">계약방법</label>
+          </div>
+        </div>
+      </div>
+      <!--관리주체, 계약금액-->
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="contract_agency"
+              placeholder="name@example.com"
+              value="{{contract.contract_agency}}"
+            />
+            <label for="contract_agency">관리주체</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="contract_money"
+              placeholder="name@example.com"
+              value="{{contract.contract_money}}"
+            />
+            <label for="contract_money">계약금액</label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -117,87 +208,146 @@
     <div class="body-content-box-label">
       <h5>파일 입력</h5>
     </div>
-    <div class="input-group">
-      <input
-        type="file"
-        class="form-control"
-        id="file_name_BML"
-        aria-describedby="inputGroupFileAddon04"
-        aria-label="Upload"
-      />
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        id="inputGroupFileAddon01"
-      >
-      <a href="{% url 'main:fileload' basic.id %}"
-      >자료준비</a>
-      </button>
-    </div>
-    <div class="input-group">
-      <input
-        type="file"
-        class="form-control"
-        id="file_name_FML"
-        aria-describedby="inputGroupFileAddon04"
-        aria-label="Upload"
-      />
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        id="inputGroupFileAddon02"
-      >
-        Button
-      </button>
-    </div>
-    <div class="input-group">
-      <input
-        type="file"
-        class="form-control"
-        id="file_name_EXCEL"
-        aria-describedby="inputGroupFileAddon04"
-        aria-label="Upload"
-      />
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        id="inputGroupFileAddon03"
-      >
-        Button
-      </button>
-    </div>
-    <div class="input-group">
-      <input
-        type="file"
-        class="form-control"
-        id="file_name_DWG"
-        aria-describedby="inputGroupFileAddon04"
-        aria-label="Upload"
-      />
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        id="inputGroupFileAddon04"
-      >
-        Button
-      </button>
-    </div>
+    <div class="container text-center">
+      <div class="row">
+        
+        <div class="col-2">
+          <div class="file-input-label">
+            <span></span>
+            <p>시설물 관리대장(PDF)</p>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="input-group">
+            <input
+              type="file"
+              class="form-control"
+              id="file_name_BML"
+              aria-describedby="inputGroupFileAddon04"
+              aria-label="Upload"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="inputGroupFileAddon01"
+            >
+              <a href="{% url 'main:fileload' basic.id %}">자료준비</a>
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-3">
+          <div class="file-input-label">
+            <p id="file_name_BML_ready" value="">준비중...</p>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col-2">
+          <div class="file-input-label">
+            <span></span>
+            <p>건축물 대장(PDF)</p>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="input-group">
+            <input
+            type="file"
+            class="form-control"
+            id="file_name_FML"
+            aria-describedby="inputGroupFileAddon04"
+            aria-label="Upload"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="inputGroupFileAddon02"
+          >자료준비
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-3"></div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col-2">
+          <div class="file-input-label">
+            <span></span>
+            <p>결함표 파일(Excel)</p>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="input-group">
+            <input
+            type="file"
+            class="form-control"
+            id="file_name_EXCEL"
+            aria-describedby="inputGroupFileAddon04"
+            aria-label="Upload"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="inputGroupFileAddon03"
+          >자료준비
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-3"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-2">
+          <div class="file-input-label">
+            <span></span>
+            <p>도면(ppt)</p>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="input-group">
+            <input
+            type="file"
+            class="form-control"
+            id="file_name_DWG"
+            aria-describedby="inputGroupFileAddon04"
+            aria-label="Upload"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="inputGroupFileAddon04"
+          >자료준비
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-3"></div>
+      </div>
+    </div>  
   </div>
 
   <!--전경사진-->
+  {% comment %}
   <div class="body-content-box">
     <div class="body-content-box-label">
       <h5>전경사진 및 약도</h5>
     </div>
     <div style="display: flex; flex-direction: row">
       <div class="square" id="map_titlePic">
-        <div class="square-inner" name="map_titlePic" >전경사진</div>
+        <div class="square-inner" name="map_titlePic">전경사진</div>
       </div>
       <div class="square" id="map_map">
         <div class="square-inner" name="map_map">약도</div>
       </div>
     </div>
   </div>
+  {% endcomment %}
 
   <!--참여기술진-->
   <div class="body-content-box">
@@ -335,14 +485,49 @@
       headers: { "X-CSRFToken": "{{csrf_token}}" },
     });
 
-    // new file or new picture
-    let newFile1 = false;
-    let newFile2 = false;
-    let newFile3 = false;
-    let newFile4 = false;
-    let newPic1 = false;
-    let newPic2 = false;
+    const basic_id={{ basic.id }}
     let fd = new FormData()
+
+    // 파일 준비 알림
+    let ready = false
+    setInterval(function(){
+      $.ajax({
+        url: "/main/"+basic_id.toString()+"/file/",
+        method: "GET",
+        processData: false,
+        contentType: false,
+        success: (response) => {
+          console.log("성공");
+          // 서버 응답 데이터에서 리디렉션 URL 추출
+          var redirectUrl = response.redirect_url;
+          console.log(redirectUrl)
+          // 리디렉션 수행 안함
+          // window.location.href = redirectUrl;
+        },
+        error: (req, status, err) => {
+          console.log(err);
+        },
+        complete: () => {
+          console.log("완료");
+        },
+      })
+
+      if (ready) {
+        const ready_text="준비 완료"  
+        $("#file_name_BML_ready").text(ready_text);
+      }
+		},10000);
+
+    $("#appear_button").on("click", (e) => {
+      if ($(e.target).attr("value")=="수정하기") {
+        $("#hidden_or_appear").css({display : "block"})
+        $(e.target).attr("value", "숨기기")
+      } else {
+        $("#hidden_or_appear").css({display : "none"})
+        $(e.target).attr("value", "수정하기")
+      }
+
+    })
 
     $(function () {
       $("#basic_startAt").datepicker({
@@ -401,10 +586,9 @@
           "</div>"
       );
     });
-    
+
 
     $("#save_button").on("click", () => {
-      const basic_id={{ basic.id }}
 
       // 기초정보
       fd.append('basic_id', {{basic.id}})
@@ -450,7 +634,7 @@
 
 
   // 이미지 입력
-  $(document).ready(() => { 
+  $(document).ready(() => {
     if ("{{map.map_titlePic_path}}" !== "-") {
       const map_titlePic_path = "{{map.map_titlePic_path}}"
       $("#map_titlePic").css({
@@ -476,6 +660,7 @@
     }
   })
 
+  // 파일 추가
   $(".input-group").on("change", ".form-control", (e) => {
     var filename = $(e.target).val().split('\\')[2]
     var idtag = $(e.target).attr("id")

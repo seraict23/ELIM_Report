@@ -16,20 +16,41 @@ from threading import Thread
 
 
 def New(req):
-    Basic.objects.filter(basic_name='임시').delete()
+
+    # 입력받은 값 > 기초정보
+    basic_name = req.POST['basic_name']
+    basic_startAt = req.POST['basic_startAt']
+    basic_endAt = req.POST['basic_endAt']
+
+    # 종속변수(년도, 월, 반기) 처리
+    basic_year = str(basic_startAt).split('-')[0]
+    basic_month = str(basic_startAt).split('-')[1]
+    if int(basic_month) > 6:
+        basic_semi = "하반기"
+    else : 
+        basic_semi = "상반기"
+
+    # 데이터 테이블 생성 및 기초정보 입력
+    basic = Basic.objects.create(
+        basic_name=basic_name,
+        basic_startAt=basic_startAt,
+        basic_endAt=basic_endAt,
+        basic_year = basic_year,
+        basic_month = basic_month,
+        basic_semi = basic_semi
+    )
+
+    # 계약정보
+    contract_name = basic_name + ' ' + basic_year + ' ' + basic_semi + ' 정기안전점검'
 
     # 데이터 초기화
-    basic = Basic.objects.create(
-        basic_name='임시',
-        basic_startAt='1111-11-11',
-        basic_endAt='1111-11-11',
-    )
     Contract.objects.create(
         contract=basic,
-        contract_name='-',
+        contract_name=contract_name,
     )
     Facility.objects.create(
         facility=basic,
+        facility_spec="-",
     )
     Map.objects.create(
         map=basic,
@@ -46,7 +67,8 @@ def New(req):
         file_name_DWG = "",
     )
     print(basic.id)
-    return HttpResponseRedirect(reverse("main:file", args=(basic.id,)))
+    redirect_url = reverse("main:file", args=(basic.id,))
+    return JsonResponse({"redirect_url": redirect_url})
 
 
 def Load(req):
@@ -147,10 +169,12 @@ def File(req, basic_id):
         
     else:
         basic = Basic.objects.get(pk=basic_id)
+        contract = Contract.objects.get(contract=basic)
         map = Map.objects.get(map = basic)
         worker = Worker.objects.filter(worker=basic).order_by("id")
         context = {
             'basic' : basic,
+            'contract': contract,
             'map' : map,
             'worker' : worker,
         }
@@ -308,6 +332,17 @@ def PDFConverter(req, basic_id):
     return render(req, 'main/file.html', context)
 
 
+def IsFileReady(req, basic_id):
+    basic = Basic.objects.get(pk=basic_id)
+
+    facility = Facility.objects.get(facility=basic)
+    if facility.facility_spec == '-' :
+        resultBool = False
+    else :
+        resultBool = True
+
+    redirect_url = reverse("main:file", args=(resultBool,))
+    return JsonResponse({"redirect_url": redirect_url})
 
 def Common(req, basic_id):
     basic = Basic.objects.get(pk=basic_id)
