@@ -1,0 +1,59 @@
+# Gather multiple raw documents into excel
+import win32com.client as win32
+from openpyxl import Workbook
+
+hwp=win32.gencache.EnsureDispatch("HWPFrame.HwpObject")
+hwp.XHwpWindows.Item(0).Visible=True
+hwp.RegisterModule("FilePathCheckDLL","SecurityModule")
+hwp.Open(r"C:\Users\k\Downloads\성과목표지표계획서(19년점검결과)_산업부_에너지인력양성에특N전력기금통합.hwp",'','')
+
+def get_text():
+    hwp.InitScan(None,0x00ff,None,None,None,None)
+    state,total_text=hwp.GetText()
+    while state not in [0,1]:
+        state,text=hwp.GetText()
+        total_text+=text
+    hwp.ReleaseScan()
+    return total_text
+
+hwp.HAction.GetDefault("RepeatFind", hwp.HParameterSet.HFindReplace.HSet);
+hwp.HParameterSet.HFindReplace.FindString = "2. 성과목표 및 지표 총괄표"
+hwp.HParameterSet.HFindReplace.Direction=2 
+hwp.HParameterSet.HFindReplace.WholeWordOnly = 1
+hwp.HParameterSet.HFindReplace.SeveralWords = 1,
+hwp.HParameterSet.HFindReplace.IgnoreMessage = 1 
+hwp.HParameterSet.HFindReplace.FindType = 1
+hwp.HAction.Execute("RepeatFind", hwp.HParameterSet.HFindReplace.HSet)
+
+hwp.MovePos(10)
+hwp.FindCtrl()
+hwp.Run('ShapeObjTableSelCell')
+
+# ctrl=hwp.HeadCtrl
+# while ctrl:
+#     if ctrl.CtrlID=="tbl":
+#         print('Table!')
+#         hwp.SetPosBySet(ctrl.GetAnchorPos(0))
+#         break
+#     else:
+#         ctrl=ctrl.Next
+
+# contents=[]
+# contents.append(get_text())
+# while hwp.HAction.Run("TableRightCell"):
+#     # True when the action is executed, False when the action can't be executed (last cell)
+#     contents.append(get_text())
+
+table_contents=dict()
+table_contents[hwp.KeyIndicator()[-1][1:].split(")")[0]]=get_text()
+while hwp.HAction.Run("TableRightCell"):
+    # True when the action is executed, False when the action can't be executed (last cell)
+    table_contents[hwp.KeyIndicator()[-1][1:].split(")")[0]]=get_text()
+
+wb=Workbook()
+ws=wb.active
+
+for cell_addr, cell_content in table_contents.items():
+    ws[cell_addr]=cell_content
+
+wb.save(r"C:\Users\k\Documents\Hangeul Sample\test_using_Hangeul.xlsx")
