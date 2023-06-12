@@ -1,0 +1,2003 @@
+{%extends 'main/base.html'%} {% block CSS %}
+
+<!-- date picker css -->
+<link
+  rel="stylesheet"
+  href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+/>
+
+<style>
+  .input-table {
+    padding: 15px 0;
+    display: none;
+    flex-direction: column;
+  }
+  .FMS-box {
+    padding-bottom: 25px;
+  }
+  .FMS-box-inner {
+    padding: 0 10px;
+  }
+  .square {
+    width: 80%;
+    position: relative;
+    border: 1px solid grey;
+  }
+  .square::after {
+    content: "";
+    display: flex;
+    padding-bottom: 80%;
+  }
+  .input-in-grid {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin: 0;
+    border: dotted 1px grey;
+  }
+  .row {
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+  }
+</style>
+
+{% endblock %} {% block BODY %}
+
+<div class="body-content">
+  <!--시설물 정보-->
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>시설물 정보</h5>
+    </div>
+
+    <div class="container text-center">
+      <!--주소-->
+      <div class="row">
+        <div class="col">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_address"
+              placeholder="name@example.com"
+              value="{{facility.facility_address}}"
+            />
+            <label for="facility_address">주소</label>
+          </div>
+        </div>
+      </div>
+      <!--면적-->
+      <div class="row">
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_width_land"
+              placeholder="name@example.com"
+              value="{{facility.facility_width_land}}"
+            />
+            <label for="facility_width_land">대지면적</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_width_building"
+              placeholder="name@example.com"
+              value="{{facility.facility_width_building}}"
+            />
+            <label for="facility_width_building">건축면적</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_width_gross"
+              placeholder="name@example.com"
+              value="{{facility.facility_width_gross}}"
+            />
+            <label for="facility_width_gross">연면적</label>
+          </div>
+        </div>
+      </div>
+      <!--구조형식-->
+      <div class="row">
+        <div class="col-5">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_structure"
+              placeholder="name@example.com"
+              value="{{facility.facility_structure}}"
+            />
+            <label for="facility_structure">구조형식</label>
+          </div>
+        </div>
+        <div class="col-5">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_floor"
+              placeholder="name@example.com"
+              value="{{facility.facility_floor}}"
+            />
+            <label for="facility_floor">동수(층수)</label>
+          </div>
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </div>
+
+    <div class="body-content-box-label">
+      <h5>종별</h5>
+    </div>
+
+    <div class="container text-center">
+      <!--시설물 종류-->
+      <div class="row">
+        <div class="col">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_spec"
+              placeholder="name@example.com"
+              value="{{facility.facility_spec}}"
+            />
+            <label for="facility_spec">시설물 종류</label>
+          </div>
+        </div>
+      </div>
+      <!--종별-->
+      <div class="row">
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_class"
+              placeholder="name@example.com"
+              value="{{facility.facility_class}}"
+            />
+            <label for="facility_class">종별</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_category"
+              placeholder="name@example.com"
+              value="{{facility.facility_category}}"
+            />
+            <label for="facility_category">구분</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_usage"
+              placeholder="name@example.com"
+              value="{{facility.facility_usage}}"
+            />
+            <label for="facility_usage">용도</label>
+          </div>
+        </div>
+        <div class="col-3"></div>
+      </div>
+    </div>
+    <div class="body-content-box-label">
+      <h5>시공정보</h5>
+    </div>
+    <div class="container text-center">
+      <!--설계감리시공-->
+      <div class="row">
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_architect"
+              placeholder="name@example.com"
+              value="{{facility.facility_architect}}"
+            />
+            <label for="facility_architect">설계자</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_supervisor"
+              placeholder="name@example.com"
+              value="{{facility.facility_supervisor}}"
+            />
+            <label for="facility_supervisor">감리자</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_builder"
+              placeholder="name@example.com"
+              value="{{facility.facility_builder}}"
+            />
+            <label for="facility_builder">시공자</label>
+          </div>
+        </div>
+      </div>
+      <!--날짜-->
+      <div class="row">
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            {% if facility.facility_constructStartAt %}
+            <input
+              type="text"
+              class="form-control"
+              id="facility_constructStartAt"
+              placeholder="name@example.com"
+              value="{{facility.facility_constructStartAt|date:'Y-m-d'}}"
+            />
+            {% else %}
+            <input
+              type="text"
+              class="form-control"
+              id="facility_constructStartAt"
+              placeholder="name@example.com"
+              value=""
+            />
+            {% endif %}
+            <label for="facility_constructStartAt">건설기간(시작일)</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            {% if facility.facility_constructEndAt %}
+            <input
+              type="text"
+              class="form-control"
+              id="facility_constructEndAt"
+              placeholder="name@example.com"
+              value="{{facility.facility_constructEndAt|date:'Y-m-d'}}"
+            />
+            {% else %}
+            <input
+              type="text"
+              class="form-control"
+              id="facility_constructEndAt"
+              placeholder="name@example.com"
+              value=""
+            />
+            {% endif %}
+            <label for="facility_constructEndAt">건설기간(종료일)</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            {% if facility.facility_buildingDate %}
+            <input
+              type="text"
+              class="form-control"
+              id="facility_buildingDate"
+              placeholder="name@example.com"
+              value="{{facility.facility_buildingDate|date:'Y-m-d'}}"
+            />
+            {% else %}
+            <input
+              type="text"
+              class="form-control"
+              id="facility_buildingDate"
+              placeholder="name@example.com"
+              value=""
+            />
+            {% endif %}
+            <label for="facility_buildingDate">사용승인일</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="facility_old"
+              placeholder="name@example.com"
+              value="{{facility.facility_old}}"
+              data-id="facility_old"
+            />
+            <label for="facility_old">준공후 경과년수</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--시설물 관리실태-->
+  <div class="body-content-box">
+    <!-- 용도변경 -->
+    <div class="FMS-box">
+      <!-- 레이블 -->
+      <div class="body-content-box-label">
+        <h5>용도변경</h5>
+      </div>
+
+      <!-- 라디오 -->
+      <div class="FMS-box-inner">
+        <div class="radio" id="FMS-usage-radio" data-id="{{FMS.FMS_Usage}}">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions1"
+              id="FMS-usage-radio1"
+              value="유"
+            />
+            <label class="form-check-label" for="FMS-usage-radio1">유</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions1"
+              id="FMS-usage-radio2"
+              value="무"
+            />
+            <label class="form-check-label" for="FMS-usage-radio2">무</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions1"
+              id="FMS-usage-radio3"
+              value="불명"
+            />
+            <label class="form-check-label" for="FMS-usage-radio3">불명</label>
+          </div>
+        </div>
+
+        <div id="FMS-usage-table" class="input-table">
+          <!-- 표 -->
+          <div class="container text-center" style="border: solid 1px grey">
+            <div class="row">
+              <div class="col">부위<br />(층수)</div>
+              <div class="col-4">
+                <div class="container text-center">
+                  <div class="row">
+                    <div>변경전</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-8">용도</div>
+                    <div class="col">면적</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="container text-center">
+                  <div class="row">
+                    <div>변경후</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-8">용도</div>
+                    <div class="col">면적</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col" style="padding-top: 10px">날짜</div>
+              <div class="col"><br />비고</div>
+            </div>
+            <!-- 입력 -->
+
+            <!--로드 데이터가 들어올 부분-->
+            <div>
+              {% for i in FMS_usage %}
+              <div class="row" id="FMS-usage-row-{{forloop.counter}}">
+                <div class="col">
+                  <input
+                    class="input-in-grid"
+                    name="1-{{forloop.counter}}-1"
+                    value="{{i.floor}}"
+                  />
+                </div>
+                <div class="col-4">
+                  <div class="container text-center">
+                    <div></div>
+                    <div class="row">
+                      <div class="col-8">
+                        <input
+                          class="input-in-grid"
+                          name="1-{{forloop.counter}}-2"
+                          value="{{i.before_useFor}}"
+                        />
+                      </div>
+                      <div class="col">
+                        <input
+                          class="input-in-grid"
+                          name="1-{{forloop.counter}}-3"
+                          value="{{i.before_area}}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="container text-center">
+                    <div></div>
+                    <div class="row">
+                      <div class="col-8">
+                        <input
+                          class="input-in-grid"
+                          name="1-{{forloop.counter}}-4"
+                          value="{{i.after_useFor}}"
+                        />
+                      </div>
+                      <div class="col">
+                        <input
+                          class="input-in-grid"
+                          name="1-{{forloop.counter}}-5"
+                          value="{{i.after_area}}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <input
+                    class="input-in-grid"
+                    name="1-{{forloop.counter}}-6"
+                    value="{{i.date}}"
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    class="input-in-grid"
+                    name="1-{{forloop.counter}}-7"
+                    value="{{i.note}}"
+                  />
+                </div>
+              </div>
+
+              {% empty %}
+              <div class="row" id="FMS-usage-row-1">
+                <div class="col">
+                  <input class="input-in-grid" name="1-1-1" value="" />
+                </div>
+                <div class="col-4">
+                  <div class="container text-center">
+                    <div></div>
+                    <div class="row">
+                      <div class="col-8">
+                        <input class="input-in-grid" name="1-1-2" value="" />
+                      </div>
+                      <div class="col">
+                        <input class="input-in-grid" name="1-1-3" value="" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="container text-center">
+                    <div></div>
+                    <div class="row">
+                      <div class="col-8">
+                        <input class="input-in-grid" name="1-1-4" value="" />
+                      </div>
+                      <div class="col">
+                        <input class="input-in-grid" name="1-1-5" value="" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" name="1-1-6" value="" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" name="1-1-7" value="" />
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <div id="FMS-usage-appendrow"></div>
+            <span
+              id="FMS-usage-appendrow-btn"
+              class="material-symbols-outlined"
+            >
+              add
+            </span>
+            <span
+              id="FMS-usage-deleterow-btn"
+              class="material-symbols-outlined"
+              data-id="deleterow"
+            >
+              remove
+            </span>
+          </div>
+
+          <!-- 사진추가 -->
+          <div>
+            <div class="d-grid gap-2" style="margin-top: 10px">
+              <div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="FMS-usage-photo-add"
+                  data-id="photo"
+                >
+                  사진추가
+                </button>
+              </div>
+            </div>
+
+            <div
+              id="FMS-usage-photo"
+              style="display: none; flex-direction: row"
+            >
+              <div class="square">
+                <div class="1-square-inner" name="FMS-usage-photo-1"></div>
+              </div>
+              <div class="square">
+                <div class="1-square-inner" name="FMS-usage-photo-2"></div>
+              </div>
+            </div>
+            <button
+              id="FMS-usage-photo-submit"
+              class="btn btn-primary"
+              type="button"
+              style="display: none; margin-top: 15px"
+            >
+              등록
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 구조변경 -->
+    <div class="FMS-box">
+      <!-- 레이블 -->
+      <div class="body-content-box-label">
+        <h5>구조변경</h5>
+      </div>
+
+      <div class="FMS-box-inner">
+        <!-- 라디오 -->
+        <div
+          class="radio"
+          id="FMS-structure-radio"
+          data-id="{{FMS.FMS_Structure}}"
+        >
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions2"
+              id="FMS-structure-radio1"
+              value="유"
+            />
+            <label class="form-check-label" for="FMS-structure-radio1"
+              >유</label
+            >
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions2"
+              id="FMS-structure-radio2"
+              value="무"
+            />
+            <label class="form-check-label" for="FMS-structure-radio2"
+              >무</label
+            >
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions2"
+              id="FMS-structure-radio3"
+              value="불명"
+            />
+            <label class="form-check-label" for="FMS-structure-radio3"
+              >불명</label
+            >
+          </div>
+        </div>
+
+        <div id="FMS-structure-table" class="input-table">
+          <!-- 표 -->
+          <div class="container text-center" style="border: solid 1px grey">
+            <div class="row">
+              <div class="col">동</div>
+              <div class="col">부재명</div>
+              <div class="col">기호</div>
+              <div class="col-2">위치</div>
+              <div class="col-3">내용</div>
+              <div class="col">담당자</div>
+              <div class="col">날짜</div>
+            </div>
+            <!-- 입력 --> {% for i in FMS_structure %}
+            <div class="row" id="FMS-structure-row-{{forloop.counter}}">
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-1"
+                  value="{{i.wing}}"
+                />
+              </div>
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-2"
+                  value="{{i.material}}"
+                />
+              </div>
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-3"
+                  value="{{i.mark}}"
+                />
+              </div>
+              <div class="col-2">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-4"
+                  value="{{i.location}}"
+                />
+              </div>
+              <div class="col-3">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-5"
+                  value="{{i.content}}"
+                />
+              </div>
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-6"
+                  value="{{i.personInCharge}}"
+                />
+              </div>
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="2-{{forloop.counter}}-7"
+                  value="{{i.date}}"
+                />
+              </div>
+            </div>
+            {%empty%}
+            <div class="row" id="FMS-structure-row-1">
+              <div class="col">
+                <input class="input-in-grid" name="2-1-1" value="" />
+              </div>
+              <div class="col">
+                <input class="input-in-grid" name="2-1-2" value="" />
+              </div>
+              <div class="col">
+                <input class="input-in-grid" name="2-1-3" value="" />
+              </div>
+              <div class="col-2">
+                <input class="input-in-grid" name="2-1-4" value="" />
+              </div>
+              <div class="col-3">
+                <input class="input-in-grid" name="2-1-5" value="" />
+              </div>
+              <div class="col">
+                <input class="input-in-grid" name="2-1-6" value="" />
+              </div>
+              <div class="col">
+                <input class="input-in-grid" name="2-1-7" value="" />
+              </div>
+            </div>
+            {%endfor%}
+            <div id="FMS-structure-appendrow"></div>
+            <span
+              id="FMS-structure-appendrow-btn"
+              class="material-symbols-outlined"
+            >
+              add
+            </span>
+            <span
+              id="FMS-structure-deleterow-btn"
+              class="material-symbols-outlined"
+              data-id="deleterow"
+            >
+              remove
+            </span>
+          </div>
+
+          <!-- 사진추가 -->
+          <div>
+            <div class="d-grid gap-2" style="margin-top: 30px">
+              <div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="FMS-structure-photo-add"
+                  data-id="photo"
+                >
+                  사진추가
+                </button>
+              </div>
+            </div>
+
+            <div
+              id="FMS-structure-photo"
+              style="display: none; flex-direction: row"
+            >
+              <div class="square">
+                <div class="2-square-inner" name="FMS-structure-photo-1"></div>
+              </div>
+              <div class="square">
+                <div class="2-square-inner" name="FMS-structure-photo-2"></div>
+              </div>
+            </div>
+            <button
+              id="FMS-structure-photo-submit"
+              class="btn btn-primary"
+              type="button"
+              style="display: none; margin-top: 15px"
+            >
+              등록
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 주변조건의 변경사항 -->
+
+    <div class="FMS-box">
+      <!-- 레이블 -->
+      <div class="body-content-box-label">
+        <h5>주변조건의 변경사항</h5>
+      </div>
+
+      <div class="FMS-box-inner">
+        <!-- 라디오 -->
+        <div class="radio" id="FMS-env-radio" data-id="{{FMS.FMS_Env}}">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions3"
+              id="FMS-env-radio1"
+              value="유"
+            />
+            <label class="form-check-label" for="FMS-env-radio1">유</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions3"
+              id="FMS-env-radio2"
+              value="무"
+            />
+            <label class="form-check-label" for="FMS-env-radio2">무</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions3"
+              id="FMS-env-radio3"
+              value="불명"
+            />
+            <label class="form-check-label" for="FMS-env-radio3">불명</label>
+          </div>
+        </div>
+
+        <div id="FMS-env-table" class="input-table">
+          <!-- 표 -->
+          <div class="container text-center" style="border: solid 1px grey">
+            <div class="row">
+              <div class="col">구분</div>
+              <div class="col">위치</div>
+              <div class="col-8">
+                <div class="row" style="justify-content: center">변경사항</div>
+                <div class="row">
+                  <div class="col">변경 전</div>
+                  <div class="col">변경 후</div>
+                </div>
+              </div>
+            </div>
+            <!-- 입력 -->
+            <div class="row">
+              <div class="col">사용하중</div>
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="3-1-1"
+                  value="{{FMS_env.0.location}}"
+                />
+              </div>
+              <div class="col-4">
+                <input
+                  class="input-in-grid"
+                  name="3-1-2"
+                  value="{{FMS_env.0.before}}"
+                />
+              </div>
+              <div class="col-4">
+                <input
+                  class="input-in-grid"
+                  name="3-1-3"
+                  value="{{FMS_env.0.after}"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">기초 및 지반조건</div>
+              <div class="col">
+                <input
+                  class="input-in-grid"
+                  name="3-2-1"
+                  value="{{FMS_env.1.location}}"
+                />
+              </div>
+              <div class="col-4">
+                <input
+                  class="input-in-grid"
+                  name="3-2-2"
+                  value="{{FMS_env.1.before}}"
+                />
+              </div>
+              <div class="col-4">
+                <input
+                  class="input-in-grid"
+                  name="3-2-3"
+                  value="{{FMS_env.1.after}}"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">주변환경</div>
+              <div class="col">
+                <input class="input-in-grid" name="3-3-1" />
+              </div>
+              <div class="col-4">
+                <input class="input-in-grid" name="3-3-2" />
+              </div>
+              <div class="col-4">
+                <input class="input-in-grid" name="3-3-3" />
+              </div>
+            </div>
+          </div>
+          <!-- 사진추가 -->
+          <div>
+            <div class="d-grid gap-2" style="margin-top: 10px">
+              <div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="FMS-env-photo-add"
+                  data-id="photo"
+                >
+                  사진추가
+                </button>
+              </div>
+            </div>
+
+            <div id="FMS-env-photo" style="display: none; flex-direction: row">
+              <div class="square">
+                <div class="3-square-inner" name="FMS-env-photo-1"></div>
+              </div>
+              <div class="square">
+                <div class="3-square-inner" name="FMS-env-photo-1"></div>
+              </div>
+            </div>
+            <button
+              id="FMS-env-photo-submit"
+              class="btn btn-primary"
+              type="button"
+              style="display: none; margin-top: 15px"
+            >
+              등록
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 증/개축 --> <!-- 셀렉터 박스 -->
+    <div class="FMS-box">
+      <!-- 레이블 -->
+      <div class="body-content-box-label">
+        <h5>증/개축</h5>
+      </div>
+
+      <div class="FMS-box-inner">
+              <!-- 라디오 -->
+      <div
+        class="radio"
+        id="FMS-expansion-radio"
+        data-id="{{FMS.FMS_Expansion}}"
+      >
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="inlineRadioOptions4"
+            id="FMS-expansion-radio1"
+            value="유"
+          />
+          <label class="form-check-label" for="FMS-expansion-radio1">유</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="inlineRadioOptions4"
+            id="FMS-expansion-radio2"
+            value="무"
+          />
+          <label class="form-check-label" for="FMS-expansion-radio2">무</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="inlineRadioOptions4"
+            id="FMS-expansion-radio3"
+            value="불명"
+          />
+          <label class="form-check-label" for="FMS-expansion-radio3"
+            >불명</label
+          >
+        </div>
+      </div>
+
+    <div id="FMS-expansion-table" class="input-table">
+      <!-- 표 -->
+      <div class="container text-center" style="border: solid 1px grey">
+        <div class="row">
+          <div class="col-sm">부위<br />(층수)</div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row">
+                <div>변경전</div>
+              </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row">
+                <div>변경후</div>
+              </div>
+              <div class="row">
+                <div class="col-8">용도</div>
+                <div class="col">면적</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm">날짜</div>
+          <div class="col-sm">비고</div>
+        </div>
+
+        {% for i in FMS_expansion %}
+        <div class="row" id="FMS-expansion-row-{{forloop.counter}}">
+          <div class="col">
+            <input class="input-in-grid" name="4-1-1" value="{{i.floor}}" />
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row"></div>
+              <div class="row">
+                <div class="col-8">
+                  <input
+                    class="input-in-grid"
+                    name="4-1-2"
+                    value="{{i.before_userFor}}"
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    class="input-in-grid"
+                    name="4-1-3"
+                    value="{{i.before_area}}"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input
+                    class="input-in-grid"
+                    name="4-1-4"
+                    value="{{i.after_userFor}}"
+                  />
+                </div>
+                <div class="col-4">
+                  <input
+                    class="input-in-grid"
+                    name="4-1-5"
+                    value="{{i.after_area}}"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <input class="input-in-grid" name="4-1-6" value="{{i.date}}" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" name="4-1-7" value="{{i.note}}" />
+          </div>
+        </div>
+
+        <!-- 입력 --> {% empty %}
+        <div class="row" id="FMS-expansion-row-1">
+          <div class="col">
+            <input class="input-in-grid" name="4-1-1" value="" />
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div class="row"></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" name="4-1-2" value="" />
+                </div>
+                <div class="col">
+                  <input class="input-in-grid" name="4-1-3" value="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="container text-center">
+              <div></div>
+              <div class="row">
+                <div class="col-8">
+                  <input class="input-in-grid" name="4-1-4" value="" />
+                </div>
+                <div class="col-4">
+                  <input class="input-in-grid" name="4-1-5" value="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <input class="input-in-grid" name="4-1-6" value="" />
+          </div>
+          <div class="col">
+            <input class="input-in-grid" name="4-1-7" value="" />
+          </div>
+        </div>
+
+        {% endfor %}
+
+        <div id="FMS-expansion-appendrow"></div>
+        <span
+          id="FMS-expansion-appendrow-btn"
+          class="material-symbols-outlined"
+        >
+          add
+        </span>
+        <span
+          id="FMS-expansion-deleterow-btn"
+          class="material-symbols-outlined"
+          data-id="deleterow"
+        >
+          remove
+        </span>
+      </div>
+      <!-- 사진추가 -->
+      <div>
+        <div class="d-grid gap-2" style="margin-top: 10px">
+          <div>
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="FMS-expansion-photo-add"
+              data-id="photo"
+            >
+              사진추가
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="FMS-expansion-photo"
+          style="display: none; flex-direction: row"
+        >
+          <div class="square">
+            <div class="4-square-inner" name="FMS-expansion-photo-1"></div>
+          </div>
+          <div class="square">
+            <div class="4-square-inner" name="FMS-expansion-photo-1"></div>
+          </div>
+        </div>
+        <button
+          id="FMS-expansion-photo-submit"
+          class="btn btn-primary"
+          type="button"
+          style="display: none; margin-top: 15px"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+
+      </div>
+
+    </div>
+
+    <!-- 과하중 및 적재하중 --> 
+    
+    <div class="FMS-box">
+      <!-- 레이블 -->
+      <div class="body-content-box-label">
+        <h5>과하중 및 적재하중</h5>
+      </div>
+
+      <div class="FMS-box-inner">
+      <!-- 라디오 -->
+        <div class="radio" id="FMS-overload-radio" data-id="{{FMS.FMS_Overload}}">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions5"
+              id="FMS-overload-radio1"
+              value="유"
+            />
+            <label class="form-check-label" for="FMS-overload-radio1">유</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions5"
+              id="FMS-overload-radio2"
+              value="무"
+            />
+            <label class="form-check-label" for="FMS-overload-radio2">무</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions5"
+              id="FMS-overload-radio3"
+              value="불명"
+            />
+            <label class="form-check-label" for="FMS-overload-radio3">불명</label>
+          </div>
+        </div>
+
+        <div id="FMS-overload-table" class="input-table">
+          <!-- 표 --> {% for i in FMS_overload %}
+          <div>
+            <input
+              type="text"
+              style="width: 24%"
+              name="5-1-1"
+              value="{{i.type}}"
+            />
+            <input
+              type="text"
+              style="width: 24%"
+              name="5-1-2"
+              value="{{i.location}}"
+            />
+            <input
+              type="text"
+              style="width: 24%"
+              name="5-1-3"
+              value="{{i.text}}"
+            />
+            <input
+              type="text"
+              style="width: 24%"
+              name="5-1-4"
+              value="{{i.note}}"
+            />
+          </div>
+          {% empty %}
+          <div>
+            <input type="text" style="width: 24%" name="5-1-1" value="" />
+            <input type="text" style="width: 24%" name="5-1-2" value="" />
+            <input type="text" style="width: 24%" name="5-1-3" value="" />
+            <input type="text" style="width: 24%" name="5-1-4" value="" />
+          </div>
+
+          {% endfor %} <!-- 사진추가 -->
+          <div>
+            <div class="d-grid gap-2" style="margin-top: 10px">
+              <div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="FMS-overload-photo-add"
+                  data-id="photo"
+                >
+                  사진추가
+                </button>
+              </div>
+            </div>
+
+            <div
+              id="FMS-overload-photo"
+              style="display: none; flex-direction: row"
+            >
+              <div class="square">
+                <div class="5-square-inner" name="FMS-Overload-photo-1"></div>
+              </div>
+              <div class="square">
+                <div class="5-square-inner" name="FMS-Overload-photo-2"></div>
+              </div>
+            </div>
+            <button
+              id="FMS-overload-photo-submit"
+              class="btn btn-primary"
+              type="button"
+              style="display: none; margin-top: 15px"
+            >
+              등록
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사고 --> 
+    <div class="FMS-box">
+      <!-- 레이블 -->
+      <div class="body-content-box-label">
+        <h5>사고</h5>
+      </div>
+
+      <div class="FMS-box-inner">
+             <!-- 라디오 -->
+      <div class="radio" id="FMS-accident-radio" data-id="{{FMS.FMS_Accident}}">
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="inlineRadioOptions6"
+            id="FMS-accident-radio1"
+            value="유"
+          />
+          <label class="form-check-label" for="FMS-accident-radio1">유</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="inlineRadioOptions6"
+            id="FMS-accident-radio2"
+            value="무"
+          />
+          <label class="form-check-label" for="FMS-accident-radio2">무</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="inlineRadioOptions6"
+            id="FMS-accident-radio3"
+            value="불명"
+          />
+          <label class="form-check-label" for="FMS-accident-radio3">불명</label>
+        </div>
+      </div>
+
+      <!-- 표 -->
+      <div id="FMS-accident-table" class="input-table">
+        {% if FMS_accident|length > 0 %}
+        <div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput1"
+              placeholder="name@example.com"
+              name="6-1-1"
+              value="{{FMS_accident.0.title}}"
+            />
+            <label for="floatingInput1">사고명</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput2"
+              placeholder="name@example.com"
+              name="6-1-2"
+              value="{{FMS_accident.0.content}}"
+            />
+            <label for="floatingInput2">사고내용</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput3"
+              placeholder="name@example.com"
+              name="6-1-3"
+              value="{{FMS_accident.0.location}}"
+            />
+            <label for="floatingInput3">구조물의 손상위치</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput4"
+              placeholder="name@example.com"
+              name="6-1-4"
+              value="{{FMS_accident.0.degree_of_damage}}"
+            />
+            <label for="floatingInput4">손상정도</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput5"
+              placeholder="name@example.com"
+              name="6-1-5"
+              value="{{FMS_accident.0.action}}"
+            />
+            <label for="floatingInput5">조치내용</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput6"
+              placeholder="name@example.com"
+              name="6-1-6"
+              value="{{FMS_accident.0.status}}"
+            />
+            <label for="floatingInput6">현재의 상태</label>
+          </div>
+        </div>
+        {% else %}
+        <div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput1"
+              placeholder="name@example.com"
+              name="6-1-1"
+              value=""
+            />
+            <label for="floatingInput1">사고명</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput2"
+              placeholder="name@example.com"
+              name="6-1-2"
+              value=""
+            />
+            <label for="floatingInput2">사고내용</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput3"
+              placeholder="name@example.com"
+              name="6-1-3"
+              value=""
+            />
+            <label for="floatingInput3">구조물의 손상위치</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput4"
+              placeholder="name@example.com"
+              name="6-1-4"
+              value=""
+            />
+            <label for="floatingInput4">손상정도</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput5"
+              placeholder="name@example.com"
+              name="6-1-5"
+              value=""
+            />
+            <label for="floatingInput5">조치내용</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput6"
+              placeholder="name@example.com"
+              name="6-1-6"
+              value=""
+            />
+            <label for="floatingInput6">현재의 상태</label>
+          </div>
+        </div>
+        {% endif %} <!-- 사진추가 -->
+        <div>
+          <div class="d-grid gap-2" style="margin-top: 10px">
+            <div>
+              <button
+                class="btn btn-primary"
+                type="button"
+                id="FMS-accident-photo-add"
+                data-id="photo"
+              >
+                사진추가
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="FMS-accident-photo"
+            style="display: none; flex-direction: row"
+          >
+            <div class="square">
+              <div class="6-square-inner" name="FMS-accident-photo-1"></div>
+            </div>
+            <div class="square">
+              <div class="6-square-inner" name="FMS-accident-photo-2"></div>
+            </div>
+          </div>
+          <button
+            id="FMS-accident-photo-submit"
+            class="btn btn-primary"
+            type="button"
+            style="display: none; margin-top: 15px"
+          >
+            등록
+          </button>
+        </div>
+      </div>
+      </div>
+ 
+    </div>
+  </div>
+
+  <!--버튼 그룹-->
+  <div class="body-content-box" >
+    <button type="button" class="btn btn-primary btn-lg" id="save_button">
+      저장하기
+    </button>
+    <form style="display:inline-block" action="{% url 'main:test3' basic.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-secondary btn-lg" id="temporary" value="Generate">
+    </form>
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"
+></script>
+
+<!--date picker js-->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+  // ==================== 토큰 ====================
+  $.ajaxSetup({
+    headers: { "X-CSRFToken": "{{csrf_token}}" },
+  });
+
+  // ==================== 전역변수 ====================
+  // 각 항목 정의
+  let FMS = {
+    "FMS-usage":0,
+    "FMS-structure":0,
+    "FMS-env":0,
+    "FMS-expansion":0,
+    "FMS-overload":0,
+    "FMS-accident":0,
+  }
+
+  {% if FMS_usage %}
+  FMS['FMS-usage'] = {{FMS_usage|length}}
+  {% endif %}
+  {% if FMS_structure %}
+  FMS['FMS-structure'] = {{FMS_structure|length}}
+  {% endif %}
+  {% if FMS_env %}
+  FMS['FMS-env'] = {{FMS_env|length}}
+  {% endif %}
+  {% if FMS_expansion %}
+  FMS['FMS-expansion'] = {{FMS_expansion|length}}
+  {% endif %}
+  {% if FMS_overload %}
+  FMS['FMS-overload'] = {{FMS_overload|length}}
+  {% endif %}
+  {% if FMS_accident %}
+  FMS['FMS-accident'] = {{FMS_accident|length}}
+  {% endif %}
+
+  let fd = new FormData()
+
+
+  // ==================== 인쇄 테스트 ====================
+
+
+
+  // ==================== 로드 기능 ====================
+  $(document).ready(() => {
+    $('.radio').each(function(i, e) {
+      if(!$(e).attr('data-id')) {
+        $(e).css('background-color', '#F8E0E0')
+      } else if ($(e).attr('data-id')==="0") {
+        var target = $("#"+e.id+"2")
+        target.prop('checked', true)
+      } else if ($(e).attr('data-id')==="-1") {
+        var target = $("#"+e.id+"3")
+        target.prop('checked', true)
+      } else {
+        var target = $("#"+e.id+"1")
+        target.prop('checked', true)
+
+        // 표 보이게
+        var idArr = e.id.split('-')
+        idArr.pop()
+        const id = '#' + idArr.join('-') + '-table'
+        console.log(id)
+        $(id).css('display','flex')
+      }
+    })
+  })
+
+  // 변경시 컬러
+  $('.radio').change(function(e) {
+    const id = $(e.target).attr('id').slice(0, -1)
+    $("#"+id).css('background-color', '#CEF6F5');
+  });
+
+
+  // ==================== 버튼 클릭시 추가사항 동적 처리 ====================
+  // 라디오 동적 처리
+  $(".radio").on("change", (e) => {
+    const idArr = $(e.target).attr("id").split('-');
+    idArr.pop();
+    const id = idArr.join('-');
+    const target = "#"+id+"-table";
+
+    var value = $(e.target).val()
+    if (value == "유") {
+      $(target).css({ display: "flex" });
+      FMS[id] = 1;
+      console.log(FMS)
+    } else if ($(e.target).val() == "무") {
+      $(target).css({ display: "none" });
+      FMS[id] = 0;
+    } else {
+      $(target).css({ display: "none" });
+      FMS[id] = -1;
+    }
+  })
+
+
+  // 사진추가 버튼 클릭 동적 처리
+  $("button[data-id=photo]").on("click", (e) => {
+    const btnid = "#"+$(e.target).attr("id")
+    console.log(btnid)
+    $(btnid).css({ display: "none" });
+
+    const idArr = $(e.target).attr("id").split('-');
+    idArr.pop();
+    const id = idArr.join('-');
+    const target = "#"+id;
+    $(target).css({ display: "flex" });
+  });
+
+
+  // ==================== 최종 요청 ====================
+  $("#save_button").on("click", () => {
+    const basic_id={{ basic.id }}
+
+    // foreinKey
+    fd.set('basic_id', basic_id)
+
+    // 시설물 정보
+    fd.set('facility_name', $("#facility_name").val())
+    fd.set('facility_address', $("#facility_address").val())
+    fd.set('facility_width_land', $("#facility_width_land").val())
+    fd.set('facility_width_building', $("#facility_width_building").val())
+    fd.set('facility_width_gross', $("#facility_width_gross").val())
+    fd.set('facility_structure', $("#facility_structure").val())
+    fd.set('facility_floor', $("#facility_floor").val())
+
+    // 종별
+    fd.set('facility_spec', $("#facility_spec").val())
+    fd.set('facility_class', $("#facility_class").val())
+    fd.set('facility_category', $("#facility_category").val())
+    fd.set('facility_usage', $("#facility_usage").val())
+
+    // 시공정보
+    fd.set('facility_architect', $("#facility_architect").val())
+    fd.set('facility_supervisor', $("#facility_supervisor").val())
+    fd.set('facility_builder', $("#facility_builder").val())
+    fd.set('facility_constructStartAt', $("#facility_constructStartAt").val())
+    fd.set('facility_constructEndAt', $("#facility_constructEndAt").val())
+    fd.set('facility_buildingDate', $("#facility_buildingDate").val())
+    fd.set('facility_old', $("#facility_old").val())
+
+    // 관리실태 정보
+    // 용도변경
+    fd.set("FMS_usage", FMS['FMS-usage'])
+    if(FMS['FMS-usage'] > 0) {
+      for (let i = 1; i <= FMS['FMS-usage']; i++) {
+        for (let j = 1; j <= 7; j++) {
+          fd.append(
+            "1-"+i.toString()+"-"+j.toString(),
+            $("input[name=1-" + i.toString() + "-" + j.toString() + "]").val()
+          );
+        }
+      }
+    }
+
+    // 구조변경
+    fd.set("FMS_structure", FMS['FMS-structure'])
+    if(FMS['FMS-structure'] > 0 ){
+      for (let i = 1; i <= FMS['FMS-structure']; i++) {
+        for (let j = 1; j <= 7; j++) {
+          fd.append(
+            "2-"+i.toString()+"-"+j.toString(),
+            $("input[name=2-" + i.toString() + "-" + j.toString() + "]").val()
+          );
+        }
+      }
+    }
+
+    // 환경변화
+    fd.append("FMS_env", FMS['FMS-env'])
+    if (FMS['FMS-env'] > 0 ) {
+      for (let i = 1; i <=3; i++){
+        for (let j = 1; j<=3; j++){
+          fd.append("3-"+i.toString()+"-"+j.toString(), $("input[name=3-"+i.toString()+"-"+j.toString()+"]").val())
+        }
+      }
+    }
+
+
+    // 증개축
+    fd.append("FMS_expansion", FMS['FMS-expansion'])
+    if(FMS['FMS-expansion'] > 0) {
+      for (let i = 1; i <= FMS['FMS-expansion']; i++) {
+        for (let j = 1; j <= 7; j++) {
+          fd.append(
+            "4-"+i.toString()+"-"+j.toString(),
+            $("input[name=4-" + i.toString() + "-" + j.toString() + "]").val()
+          );
+        }
+      }
+    }
+
+    // 과하중
+    fd.append("FMS_overload", FMS['FMS-overload'])
+    if(FMS['FMS-overload'] > 0) {
+      for(let j=1; j<=4;j++) {
+        fd.append("5-1-"+j.toString(), $("input[name=5-1-"+j.toString()+"]").val());
+      }
+    }
+
+    // 사고명
+    fd.append("FMS_accident", FMS["FMS-accident"])
+    if(FMS["FMS-accident"] > 0) {
+      for(let j=1;j<=6;j++){
+        fd.append("6-1-"+j.toString(),  $("input[name=6-1-"+j.toString()+"]").val())
+      }
+    }
+
+    $.ajax({
+      url: "/main/"+basic_id.toString()+"/facility/",
+      data: fd,
+      method: "POST",
+      processData: false,
+      contentType: false,
+      success: (response) => {
+        console.log("성공");
+        // 서버 응답 데이터에서 리디렉션 URL 추출
+        // var redirectUrl = response.redirect_url;
+        // console.log(redirectUrl)
+        // 리디렉션 수행
+        // window.location.href = redirectUrl;
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      }
+    })
+  })
+
+
+  // 테스트용
+  $("#temporary").on("click", function () {
+    let basic_id = {{basic.id}}
+
+    $.ajax({
+      url: "/main/"+basic_id.toString()+"/facility/",
+      data: fd,
+      method: "POST",
+      processData: false,
+      contentType: false,
+      success: () => {
+        console.log("성공");
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    });
+  });
+
+
+
+  // ==================== 표 입력 행 추가 ====================
+  // 1. 용도변경
+  $("#FMS-usage-appendrow-btn").on("click", () => {
+    FMS['FMS-usage']++;
+    const row = FMS['FMS-usage'];
+    $("#FMS-usage-appendrow").append(
+      '<div class="row" ' +
+      'id="FMS-usage-row-' +
+      row.toString() +
+      '">' +
+      '<div class="col"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-1" value=""/></div>' +
+      '<div class="col-4"><div class="container text-center"><div></div><div class="row">' +
+      '<div class="col-8"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-2" value=""/></div>' +
+      '<div class="col"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-3" value=""/></div>' +
+      "</div></div></div>" +
+      '<div class="col-4"><div class="container text-center"><div></div><div class="row">' +
+      '<div class="col-8"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-4" value=""/></div>' +
+      '<div class="col"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-5" value=""/></div>' +
+      "</div></div></div>" +
+      '<div class="col"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-6" value=""/></div>' +
+      '<div class="col"><input class="input-in-grid" name="1-' +
+      row.toString() +
+      '-7" value=""/></div>' +
+      '</div>'
+    );
+  });
+
+
+  // 2. 구조변경
+  $("#FMS-structure-appendrow-btn").on("click", () => {
+    FMS['FMS-structure']++;
+    const row = FMS['FMS-structure'].toString()
+    $("#FMS-structure-appendrow").append(
+      '<div class="row" '+
+      'id="FMS-structure-row-' +
+      row.toString() +
+      '">'+
+      '<div class="col"><input class="input-in-grid" name="2-'+row.toString()+'-1" value=""/></div>'+
+      '<div class="col"><input class="input-in-grid" name="2-'+row.toString()+'-2" value=""/></div>'+
+      '<div class="col"><input class="input-in-grid" name="2-'+row.toString()+'-3" value=""/></div>'+
+      '<div class="col-2"><input class="input-in-grid" name="2-'+row.toString()+'-4" value=""/></div>'+
+      '<div class="col-3"><input class="input-in-grid" name="2-'+row.toString()+'-5" value=""/></div>'+
+      '<div class="col"><input class="input-in-grid" name="2-'+row.toString()+'-6"value="" /></div>'+
+      '<div class="col"><input class="input-in-grid" name="2-'+row.toString()+'-7"value="" /></div>'+
+      '</div>'
+    );
+  });
+
+  // 3. 증/개축
+  $("#FMS-expansion-appendrow-btn").on("click", () => {
+    FMS['FMS-expansion']++;
+    const row = FMS['FMS-expansion'].toString()
+    $("#FMS-expansion-appendrow").append(
+      '<div class="row">'+
+      '<div class="col"><input class="input-in-grid" name="4-'+row.toString()+'-1" value=""/></div>'+
+      '<div class="col-4"><div class="container text-center"><div class="row"></div><div class="row">'+
+      '<div class="col-8"><input class="input-in-grid" name="4-'+row.toString()+'-2" value=""/></div>'+
+      '<div class="col"><input class="input-in-grid" name="4-'+row.toString()+'-3"/ value=""></div>'+
+      '</div></div></div>'+
+      '<div class="col-4"><div class="container text-center"><div></div><div class="row">'+
+      '<div class="col-8"><input class="input-in-grid" name="4-'+row.toString()+'-4" value=""/></div>'+
+      '<div class="col-4"><input class="input-in-grid" name="4-'+row.toString()+'-5" value=""/></div>'+
+      '</div></div></div>'+
+      '<div class="col"><input class="input-in-grid" name="4-'+row.toString()+'-6" value=""/></div>'+
+      '<div class="col"><input class="input-in-grid" name="4-'+row.toString()+'-7" value=""/></div>'+
+      '</div>'
+    );
+  });
+
+  // 동적 처리 : 행 삭제
+  $("span[data-id='deleterow']").on("click", (e) => {
+    let id = $(e.target).attr("id")
+
+    const key = id.split('-')[0]+'-'+id.split('-')[1]
+
+    id = id.replace('btn', FMS[key])
+    id = id.replace('deleterow', 'row')
+    $('#'+id).remove('.row')
+    FMS[key]--;
+  });
+
+
+  // ==================== 이미지 처리 ====================
+  function dragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    var bgvalue = $(e.target).css("background-color");
+
+    // if ($(e.target).css("background-image")) {
+    //   console.log("있다")
+    // } else {
+    //   console.log("없다")
+    // }
+
+    if (bgvalue === "rgb(167, 238, 250)") {
+      // console.log(bgvalue);
+    } else {
+      if (e.type === "dragover") {
+        $(e.target).css({ background: "rgb(167, 238, 255)" });
+      } else {
+        $(e.target).css({ background: "white" });
+      }
+    }
+  }
+
+  function uploadFiles(e) {
+    var target_element = $(e.target);
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.originalEvent.dataTransfer.files.length > 1) {
+      alert("하나만 올리세요");
+      return;
+    } else {
+      imgFile = e.originalEvent.dataTransfer.files;
+      imgFileName = imgFile[0].name;
+
+      // 파일명 데이터에 추가
+      var nametag = target_element.attr("name");
+      console.log(nametag)
+      fd.set(nametag, imgFileName);
+
+      target_element.css({
+        "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color":"rgb(167, 238, 250)"
+      });
+    }
+  }
+
+  $(".square")
+    .on("dragover", dragOver)
+    .on("dragleave", dragOver)
+    .on("drop", uploadFiles);
+
+
+
+  // 준공후 경과년수 자동계산
+  $("#facility_buildingDate").on('change', (e) => {
+    let startAt = $(e.target).val();
+    console.log(startAt)
+    const startAtNo = Number(startAt.toString().split('-')[0])
+    console.log(startAtNo)
+
+    let basic_startAt = "{{ basic.basic_startAt|date:'Y-m-d' }}"
+    console.log(basic_startAt)
+    const basic_startAtNo = Number(basic_startAt.toString().split('-')[0])
+    console.log(basic_startAtNo)
+
+    const facility_old = '약 ' + (basic_startAtNo - startAtNo ).toString()+'년'
+
+    $("input[data-id=facility_old]").attr("value", facility_old)
+  })
+
+
+
+  $(function () {
+    $("#facility_constructStartAt").datepicker({
+      dateFormat: "yy-mm-dd",
+      monthNames: [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월",
+      ],
+    });
+  });
+
+  $(function () {
+    $("#facility_constructEndAt").datepicker({
+      dateFormat: "yy-mm-dd",
+      monthNames: [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월",
+      ],
+    });
+  });
+
+  $(function () {
+    $("#facility_buildingDate").datepicker({
+      dateFormat: "yy-mm-dd",
+      monthNames: [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월",
+      ],
+    });
+  });
+</script>
+
+{% endblock %}

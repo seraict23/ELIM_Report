@@ -306,7 +306,7 @@ function uploadFiles(e) {
     var nametag = target_element.attr("name");
     console.log(nametag)
     fd.set(nametag, imgFileName);
-
+ 
     target_element.css({
       "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
       outline: "none",

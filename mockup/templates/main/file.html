@@ -9,11 +9,11 @@
 {% endcomment %}
 
 <style>
-  .table {
+  div.table {
     display: flex;
     flex-direction: column;
   }
-  .table > :not(caption) > * > * {
+  div.table > :not(caption) > * > * {
     padding: 0;
   }
 
@@ -32,16 +32,20 @@
     justify-content: space-between;
   }
 
-  .square {
-    width: 50%;
-    position: relative;
-    border: 1px solid grey;
+  .file-ready-indicator {
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
   }
-  .square:after {
-    content: "";
-    display: flex;
-    padding-bottom: 80%;
+  .spinner-border {
+    display: none;
   }
+
+  p.grid-text {
+    margin: 0 auto;
+  }
+
+
 </style>
 
 {% endblock %} {% block BODY %}
@@ -59,15 +63,6 @@
 
     <div id="hidden_or_appear" style="display: none">
       <div class="form-floating mb-3">
-        {% if basic.basic_name == '임시'%}
-        <input
-          type="text"
-          class="form-control"
-          id="basic_name"
-          placeholder="name@example.com"
-          value=""
-        />
-        {%else%}
         <input
           type="text"
           class="form-control"
@@ -75,20 +70,9 @@
           placeholder="name@example.com"
           value="{{basic.basic_name}}"
         />
-        {% endif %}
         <label for="basic_name">건축물명</label>
       </div>
       <div class="form-floating mb-3">
-        {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
-        <input
-          type="text"
-          class="form-control"
-          id="basic_startAt"
-          placeholder="name@example.com"
-          value=""
-        />
-
-        {% else %}
         <input
           type="text"
           class="form-control"
@@ -96,21 +80,11 @@
           placeholder="name@example.com"
           value="{{basic.basic_startAt|date:'Y-m-d'}}"
         />
-        {% endif %}
         <!-- DateTimePicker 위젯를 적용하기 위한 TextBox를 선언한다. -->
 
         <label for="basic_startAt">시작일</label>
       </div>
       <div class="form-floating mb-3">
-        {% if basic.basic_startAt|date:'Y-m-d' == '1111-11-11' %}
-        <input
-          type="text"
-          class="form-control"
-          id="basic_endAt"
-          placeholder="name@example.com"
-          value=""
-        />
-        {%else%}
         <input
           type="text"
           class="form-control"
@@ -118,7 +92,6 @@
           placeholder="name@example.com"
           value="{{basic.basic_endAt|date:'Y-m-d'}}"
         />
-        {%endif%}
         <label for="basic_endAt">종료일</label>
       </div>
     </div>
@@ -204,6 +177,7 @@
   </div>
 
   <!--파일입력-->
+  <!--
   <div class="body-content-box">
     <div class="body-content-box-label">
       <h5>파일 입력</h5>
@@ -214,7 +188,7 @@
         <div class="col-2">
           <div class="file-input-label">
             <span></span>
-            <p>시설물 관리대장(PDF)</p>
+            <p class="grid-text">시설물 대장(PDF)</p>
           </div>
         </div>
         <div class="col-7">
@@ -227,18 +201,21 @@
               aria-label="Upload"
             />
             <button
-              class="btn btn-outline-secondary"
+              class="btn btn-outline-success"
               type="button"
-              id="inputGroupFileAddon01"
+              id="file_name_BML_btn"
             >
-              <a href="{% url 'main:fileload' basic.id %}">자료준비</a>
+            자료준비
             </button>
           </div>
         </div>
         
         <div class="col-3">
-          <div class="file-input-label">
-            <p id="file_name_BML_ready" value="">준비중...</p>
+          <div class="file-ready-indicator" id="file_name_BML_label">
+            <p class="grid-text" id="file_name_BML_ready" value="">준비중...</p>
+            <div class="spinner-border text-primary" role="status" id="file_name_BML_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
             <span></span>
           </div>
         </div>
@@ -249,7 +226,7 @@
         <div class="col-2">
           <div class="file-input-label">
             <span></span>
-            <p>건축물 대장(PDF)</p>
+            <p class="grid-text">건축물 대장(PDF)</p>
           </div>
         </div>
         <div class="col-7">
@@ -264,13 +241,21 @@
           <button
             class="btn btn-outline-secondary"
             type="button"
-            id="inputGroupFileAddon02"
+            id="file_name_FML_btn"
           >자료준비
             </button>
           </div>
         </div>
         
-        <div class="col-3"></div>
+        <div class="col-3">
+          <div class="file-ready-indicator" id="file_name_FML_label">
+            <p class="grid-text" id="file_name_FML_ready" value="">준비중...</p>
+            <div class="spinner-border text-primary" role="status" id="file_name_FML_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <span></span>
+          </div>
+        </div>
       </div>
 
       <div class="row">
@@ -278,10 +263,11 @@
         <div class="col-2">
           <div class="file-input-label">
             <span></span>
-            <p>결함표 파일(Excel)</p>
+            <p class="grid-text">결함표 파일(Excel)</p>
           </div>
         </div>
         <div class="col-7">
+
           <div class="input-group">
             <input
             type="file"
@@ -292,21 +278,29 @@
           />
           <button
             class="btn btn-outline-secondary"
-            type="button"
-            id="inputGroupFileAddon03"
-          >자료준비
-            </button>
+            type="submit"
+            id="file_name_EXCEL_btn"
+          >
+          자료준비</button>
           </div>
         </div>
         
-        <div class="col-3"></div>
+        <div class="col-3">
+          <div class="file-ready-indicator" id="file_name_EXCEL_label">
+            <p class="grid-text" id="file_name_EXCEL_ready" value="">준비중...</p>
+            <div class="spinner-border text-primary" role="status" id="file_name_EXCEL_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <span></span>
+          </div>
+        </div>
       </div>
 
       <div class="row">
         <div class="col-2">
           <div class="file-input-label">
             <span></span>
-            <p>도면(ppt)</p>
+            <p class="grid-text">도면(ppt)</p>
           </div>
         </div>
         <div class="col-7">
@@ -321,33 +315,175 @@
           <button
             class="btn btn-outline-secondary"
             type="button"
-            id="inputGroupFileAddon04"
+            id="file_name_DWG_btn"
           >자료준비
             </button>
           </div>
         </div>
         
-        <div class="col-3"></div>
+        <div class="col-3">
+          <div class="file-ready-indicator" id="file_name_DWG_label">
+            <p class="grid-text" id="file_name_DWG_ready" value="">준비중...</p>
+            <div class="spinner-border text-primary" role="status" id="file_name_DWG_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <span></span>
+          </div>
+        </div>
       </div>
     </div>  
   </div>
+  -->
 
-  <!--전경사진-->
-  {% comment %}
   <div class="body-content-box">
-    <div class="body-content-box-label">
-      <h5>전경사진 및 약도</h5>
+    <div
+      class="body-content-box-label"
+      style="display: flex; flex-direction: row; justify-content: space-between"
+    >
+      <h5>파일 업로드</h5>
     </div>
-    <div style="display: flex; flex-direction: row">
-      <div class="square" id="map_titlePic">
-        <div class="square-inner" name="map_titlePic">전경사진</div>
-      </div>
-      <div class="square" id="map_map">
-        <div class="square-inner" name="map_map">약도</div>
-      </div>
-    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" style="width:16%">파일</th>
+          <th scope="col" style="width:60%">파일입력</th>
+          <th scope="col" colspan="2">상태</th>
+          <th scope="col" style="width:10%"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">시설물 대장 (PDF)</th>
+          <td>
+            <div class="input-group">
+              <input
+                type="file"
+                class="form-control"
+                id="file_name_BML"
+                aria-describedby="inputGroupFileAddon04"
+                aria-label="Upload"
+              />
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                id="file_name_BML_btn"
+              >
+              업로드
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="file-ready-indicator" id="file_name_BML_label">
+              <p class="grid-text" id="file_name_BML_ready" value="">준비중...</p>
+            </div>
+          </td>
+          <td>
+            <div class="spinner-border text-primary" role="status" id="file_name_BML_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <th scope="row">건축물 대장 (PDF)</th>
+          <td>
+            <div class="input-group">
+              <input
+              type="file"
+              class="form-control"
+              id="file_name_FML"
+              aria-describedby="inputGroupFileAddon04"
+              aria-label="Upload"
+              />
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                id="file_name_FML_btn"
+                >업로드
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="file-ready-indicator" id="file_name_FML_label">
+              <p class="grid-text" id="file_name_FML_ready" value="">준비중...</p>
+            </div>
+          </td>
+          <td>
+            <div class="spinner-border text-primary" role="status" id="file_name_FML_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <th scope="row">결함표 (EXCEL)</th>
+          <td>
+            <div class="input-group">
+              <input
+              type="file"
+              class="form-control"
+              id="file_name_EXCEL"
+              aria-describedby="inputGroupFileAddon04"
+              aria-label="Upload"
+            />
+            <button
+              class="btn btn-outline-primary"
+              type="submit"
+              id="file_name_EXCEL_btn"
+            >
+            업로드</button>
+            </div>
+          </td>
+          <td>
+            <div class="file-ready-indicator" id="file_name_EXCEL_label">
+              <p class="grid-text" id="file_name_EXCEL_ready" value="">준비중...</p>
+            </div>
+          </td>
+          <td>
+            <div class="spinner-border text-primary" role="status" id="file_name_EXCEL_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <th scope="row">도면 (PPT)</th>
+          <td>
+            <div class="input-group">
+              <input
+              type="file"
+              class="form-control"
+              id="file_name_DWG"
+              aria-describedby="inputGroupFileAddon04"
+              aria-label="Upload"
+              />
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                id="file_name_DWG_btn"
+              >업로드
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="file-ready-indicator" id="file_name_DWG_label">
+              <p class="grid-text" id="file_name_DWG_ready" value="">준비중...</p>
+            </div>
+          </td>
+          <td>
+            <div class="spinner-border text-primary" role="status" id="file_name_DWG_spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  {% endcomment %}
+
+  
+
+
 
   <!--참여기술진-->
   <div class="body-content-box">
@@ -463,11 +599,12 @@
     </div>
   </div>
 
+  <!--버튼-->
   <div class="body-content-box">
     <button type="button" class="btn btn-primary btn-lg" id="save_button">
       저장하기
     </button>
-    <button type="button" class="btn btn-secondary btn-lg">생성하기</button>
+    <button type="button" class="btn btn-secondary btn-lg" id="test_button">생성하기</button>
   </div>
 </div>
 
@@ -481,186 +618,62 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 <script>
-    $.ajaxSetup({
-      headers: { "X-CSRFToken": "{{csrf_token}}" },
-    });
+  /* 목차  
+  로드기능은 장고에서 처리
+  - 토큰
+  - 전역변수
+  - 파일처리
+  - datepicker
+  - 참여기술자
+  - 요청
+  */
+  //===================== CSRF 토큰 ====================
+  $.ajaxSetup({
+    headers: { "X-CSRFToken": "{{csrf_token}}" },
+  });
 
-    const basic_id={{ basic.id }}
-    let fd = new FormData()
+  //===================== 전역 변수 ====================
+  const basic_id={{ basic.id }}
+  let fd = new FormData()
 
-    // 파일 준비 알림
-    let ready = false
-    setInterval(function(){
-      $.ajax({
-        url: "/main/"+basic_id.toString()+"/file/",
-        method: "GET",
-        processData: false,
-        contentType: false,
-        success: (response) => {
-          console.log("성공");
-          // 서버 응답 데이터에서 리디렉션 URL 추출
-          var redirectUrl = response.redirect_url;
-          console.log(redirectUrl)
-          // 리디렉션 수행 안함
-          // window.location.href = redirectUrl;
-        },
-        error: (req, status, err) => {
-          console.log(err);
-        },
-        complete: () => {
-          console.log("완료");
-        },
-      })
-
-      if (ready) {
-        const ready_text="준비 완료"  
-        $("#file_name_BML_ready").text(ready_text);
-      }
-		},10000);
-
-    $("#appear_button").on("click", (e) => {
-      if ($(e.target).attr("value")=="수정하기") {
-        $("#hidden_or_appear").css({display : "block"})
-        $(e.target).attr("value", "숨기기")
-      } else {
-        $("#hidden_or_appear").css({display : "none"})
-        $(e.target).attr("value", "수정하기")
-      }
-
-    })
-
-    $(function () {
-      $("#basic_startAt").datepicker({
-        dateFormat: "yy-mm-dd",
-        monthNames: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ]
-      });
-    });
-
-    $(function () {
-      $("#basic_endAt").datepicker({
-        dateFormat: "yy-mm-dd",
-        monthNames: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ]
-      });
-    });
-
-    let startAt = ""
-    let endAt = ""
-
-    $("#basic_startAt").on('change', (e) => {
-      startAt = $(e.target).val();
-      $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt)
-    })
-
-    $("#basic_endAt").on('change', (e) => {
-      endAt = $(e.target).val();
-      $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt)
-    })
-
-    {% if worker|length > 0 %}
-    let row = {{worker|length}}
-    {% else %}
-    let row = 1;
-    {% endif %}
-    $("#worker-appendrow-button").on("click", () => {
-      row++;
-      $("#worker-appendrow").append(
-        '<div class="row">' +
-          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
-          row.toString() +
-          '-1" value="참여기술자"></div>' +
-          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
-          row.toString() +
-          '-2"></div>' +
-          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
-          row.toString() +
-          '-3"></div>' +
-          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
-          row.toString() +
-          '-4" data-id="worker_period" value="'+startAt.toString()+' ~ '+endAt.toString()+'"></div>' +
-          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
-          row.toString() +
-          '-5" value="보고서 작성 및 현장조사"></div>' +
-          '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
-          row.toString() +
-          '-6"></div>' +
-          "</div>"
-      );
-    });
-
-
-    $("#save_button").on("click", () => {
-
-      // 기초정보
-      fd.append('basic_id', {{basic.id}})
-      fd.append('basic_name', $("#basic_name").val())
-      fd.append('basic_startAt', $("#basic_startAt").val())
-      fd.append('basic_endAt', $("#basic_endAt").val())
-
-      // 파일명
-
-
-      // 참여기술자
-      fd.append("worker-length", row.toString());
-      for (let i = 1; i <= row; i++) {
-        for (let j = 1; j <= 6; j++)
-          fd.append(
-            "worker-" + i.toString() + "-" + j.toString(),
-            $("input[name=" + i.toString() + "-" + j.toString() + "]").val()
-          );
-      }
-
-      $.ajax({
-        url: "/main/"+basic_id.toString()+"/file/",
-        data: fd,
-        method: "POST",
-        processData: false,
-        contentType: false,
-        success: (response) => {
-          console.log("성공");
-          // 서버 응답 데이터에서 리디렉션 URL 추출
-          var redirectUrl = response.redirect_url;
-          console.log(redirectUrl)
-          // 리디렉션 수행
-          window.location.href = redirectUrl;
-        },
-        error: (req, status, err) => {
-          console.log(err);
-        },
-        complete: () => {
-          console.log("완료");
-        },
-      })
-    })
-
-
-  // 이미지 입력
-  $(document).ready(() => {
-    if ("{{map.map_titlePic_path}}" !== "-") {
-      const map_titlePic_path = "{{map.map_titlePic_path}}"
-      $("#map_titlePic").css({
-        "background-image": "url("+"'"+map_titlePic_path+"'"+")",
-        outline: "none",
-        "background-size": "100%",
-        "background-repeat": "no-repeat",
-        "background-position": "center",
-        "background-color": "rgb(167, 238, 250)",
-      })
-    }
-
-    if ("{{map.map_map_path}}" !== "-") {
-      const map_map_path = "{{map.map_map_path}}"
-      $("#map_map").css({
-        "background-image": "url("+"'"+map_map_path+"'"+")",
-        outline: "none",
-        "background-size": "100%",
-        "background-repeat": "no-repeat",
-        "background-position": "center",
-        "background-color": "rgb(167, 238, 250)",
-      })
-    }
+  //===================== 테스트 generate 버튼 ====================
+  $("#test_button").on("click", () => {
+        // 참여기술자
+        fd.append("worker-length", row.toString());
+        for (let i = 1; i <= row; i++) {
+          for (let j = 1; j <= 6; j++)
+            fd.append(
+              "worker-" + i.toString() + "-" + j.toString(),
+              $("input[name=" + i.toString() + "-" + j.toString() + "]").val()
+            );
+        }
+    
+        $.ajax({
+          url: "/main/"+basic_id.toString()+"/test/",
+          data: fd,
+          method: "POST",
+          processData: false,
+          contentType: false,
+          success: (response) => {
+            console.log("성공");
+            // 서버 응답 데이터에서 리디렉션 URL 추출
+            // var redirectUrl = response.redirect_url;
+            // console.log(redirectUrl)
+            // 리디렉션 수행
+            // window.location.href = redirectUrl;
+          },
+          error: (req, status, err) => {
+            console.log(err);
+          },
+          complete: () => {
+            console.log("완료");
+          },
+        })
   })
+  
 
-  // 파일 추가
+  //===================== 파일 처리 ====================
+  // 파일 업로드
   $(".input-group").on("change", ".form-control", (e) => {
     var filename = $(e.target).val().split('\\')[2]
     var idtag = $(e.target).attr("id")
@@ -668,63 +681,235 @@
     fd.append(idtag, filename)
   })
 
-  function dragOver(e) {
-    e.stopPropagation();
-    e.preventDefault();
+  // 업로드 버튼
+  $(".btn").on("click", (e) => {
+    if ($(e.target).text().trim() === "업로드") {
+      let idArr = $(e.target).attr("id").split('_')
+      console.log(idArr)
+      var fileType = idArr[2]
+      var url = "upload"+fileType
+      console.log(url)
 
-    var bgvalue = $(e.target).css("background-color");
+      idArr.pop()
+      var id = idArr.join('_')
 
-    // 무조건 있다로 나옴;;
-    // if ($(e.target).css("background-image")) {
-    //   console.log("있다")
-    // } else {
-    //   console.log("없다")
-    // }
+      if (fd.has(id)) {
+        var filename = fd.get(id)
+        console.log(filename)
+        UploadFile(url, filename, id)
 
-    if (bgvalue === "rgb(167, 238, 250)") {
-      // console.log(bgvalue);
-    } else {
-      if (e.type === "dragover") {
-        $(e.target).css({ background: "rgb(167, 238, 255)" });
+        isFileReady(fileType, id)
       } else {
-        $(e.target).css({ background: "white" });
+        alert('파일을 선택하세요.')
       }
+
+
     }
+  })
+
+
+  function UploadFile(url, fileName, id) {
+    var filename = fd.get(id)
+    fd.set('filename', filename)
+    $.ajax({
+      url: "/main/"+basic_id.toString()+"/"+url+"/",
+      method: "POST",
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: (response) => {
+        console.log("성공");
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    })
+    $("#"+id+"_label").css({display: "flex"})
+    $("#"+id+"_spinner").css({display: "flex"})
   }
 
-  function uploadFiles(e) {
-    var target_element = $(e.target);
-    e.stopPropagation();
-    e.preventDefault();
-    if (e.originalEvent.dataTransfer.files.length > 1) {
-      alert("하나만 올리세요");
-      return;
+
+  // 파일 준비 알림
+  let ready = false
+  let timer;
+  function isFileReady(fileType, id) {
+    let counter = 0
+    timer = setInterval(function(){
+      var resultBool = false
+      $.ajax({
+        url: "/main/"+basic_id.toString()+"/"+fileType+"/fileReady/",
+        method: "GET",
+        processData: false,
+        contentType: false,
+        success: (response) => {
+          console.log("성공");
+          resultBool = response.resultBool;
+          console.log(resultBool)
+        },
+        error: (req, status, err) => {
+          console.log(err);
+        },
+        complete: () => {
+          console.log("완료");
+          if (resultBool) {
+            const ready_text="준비 완료"
+            $("#"+id+"_ready").text(ready_text);
+            $("#"+id+"_spinner").css({display:"none"})
+            clearInterval(timer)
+          }
+        },
+      })
+      counter++
+      if (counter>10) {
+        clearInterval(timer)
+        console.log("time out")
+      }
+    },3000);
+  }
+
+  $(document).ready(
+    // isFileReady()
+  );
+
+
+
+  // 기본정보 수정/감추기
+  $("#appear_button").on("click", (e) => {
+    if ($(e.target).attr("value")=="수정하기") {
+      $("#hidden_or_appear").css({display : "block"})
+      $(e.target).attr("value", "숨기기")
     } else {
-      var imgFile = e.originalEvent.dataTransfer.files;
-      var imgFileName = imgFile[0].name;
-      console.log(imgFile[0]);
-      target_element.html("");
-      var idtag = target_element.attr("id");
-      console.log(idtag)
-
-      // 파일명 데이터에 추가
-      fd.set(idtag, imgFileName);
-
-      target_element.css({
-        "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
-        outline: "none",
-        "background-size": "100%",
-        "background-repeat": "no-repeat",
-        "background-position": "center",
-        "background-color": "rgb(167, 238, 250)",
-      });
+      $("#hidden_or_appear").css({display : "none"})
+      $(e.target).attr("value", "수정하기")
     }
-  }
+  })
 
-  $(".square")
-    .on("dragover", dragOver)
-    .on("dragleave", dragOver)
-    .on("drop", uploadFiles);
+  //===================== datepicker ====================
+  // 날짜
+  $(function () {
+    $("#basic_startAt").datepicker({
+      dateFormat: "yy-mm-dd",
+      monthNames: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ]
+    });
+  });
+
+  $(function () {
+    $("#basic_endAt").datepicker({
+      dateFormat: "yy-mm-dd",
+      monthNames: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ]
+    });
+  });
+
+  //===================== 참여기술자 ====================
+  // 참여기술자 날짜 자동 변경 : 로드시 & 데이터변경시
+  let startAt = ""
+  let endAt = ""
+
+  $(document).ready(
+    startAt = $("#basic_startAt").attr("value"),
+    endAt = $("#basic_endAt").attr("value"),
+    $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt),
+  );
+
+  $("#basic_startAt").on('change', (e) => {
+    startAt = $(e.target).val();
+    $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt)
+  })
+
+  $("#basic_endAt").on('change', (e) => {
+    endAt = $(e.target).val();
+    $("input[data-id=worker_period]").attr("value", startAt+" ~ "+endAt)
+  })
+
+
+  // 참여기술자
+  {% if worker|length > 0 %}
+  let row = {{worker|length}}
+  {% else %}
+  let row = 1;
+  {% endif %}
+  $("#worker-appendrow-button").on("click", () => {
+    row++;
+    $("#worker-appendrow").append(
+      '<div class="row">' +
+        '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+        row.toString() +
+        '-1" value="참여기술자"></div>' +
+        '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+        row.toString() +
+        '-2"></div>' +
+        '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+        row.toString() +
+        '-3"></div>' +
+        '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+        row.toString() +
+        '-4" data-id="worker_period" value="'+startAt.toString()+' ~ '+endAt.toString()+'"></div>' +
+        '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+        row.toString() +
+        '-5" value="보고서 작성 및 현장조사"></div>' +
+        '<div class="col" style="padding:0px"><input class="input-in-grid" type="text" name="' +
+        row.toString() +
+        '-6"></div>' +
+        "</div>"
+    );
+  });
+
+
+  //===================== 최종 요청 ====================
+  $("#save_button").on("click", () => {
+
+    // 기초정보
+    fd.append('basic_id', {{basic.id}})
+    fd.append('basic_name', $("#basic_name").val())
+    fd.append('basic_startAt', $("#basic_startAt").val())
+    fd.append('basic_endAt', $("#basic_endAt").val())
+
+    // 계약정보
+    fd.append('contract_name', $("#contract_name").val())
+    fd.append('contract_joint', $("#contract_joint").val())
+    fd.append('contract_method', $("#contract_method").val())
+    fd.append('contract_agency', $("#contract_agency").val())
+    fd.append('contract_money', $("#contract_money").val())
+
+    // 파일명 하단에
+
+    // 참여기술자
+    fd.append("worker-length", row.toString());
+    for (let i = 1; i <= row; i++) {
+      for (let j = 1; j <= 6; j++)
+        fd.append(
+          "worker-" + i.toString() + "-" + j.toString(),
+          $("input[name=" + i.toString() + "-" + j.toString() + "]").val()
+        );
+    }
+
+    $.ajax({
+      url: "/main/"+basic_id.toString()+"/file/",
+      data: fd,
+      method: "POST",
+      processData: false,
+      contentType: false,
+      success: (response) => {
+        console.log("성공");
+        // 서버 응답 데이터에서 리디렉션 URL 추출
+        // var redirectUrl = response.redirect_url;
+        // console.log(redirectUrl)
+        // 리디렉션 수행
+        // window.location.href = redirectUrl;
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    })
+  })
+
+
 </script>
 
 {% endblock %}

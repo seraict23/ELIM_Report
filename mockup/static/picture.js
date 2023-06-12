@@ -1,24 +1,24 @@
 let navcount = 1;
-let formData = new FormData();
+let fd = new FormData();
 
 $("#save").on("click", (e) => {
   const answer = confirm("글을 저장하시겠습니까?");
 
   // piccount를 pagecount로 변경할것
-  formData.append("piccount", navcount.toString());
-  formData.append("pagecount", navcount.toString());
+  fd.append("piccount", navcount.toString());
+  fd.append("pagecount", navcount.toString());
 
   for (let i = 1; i <= 6 * navcount; i++) {
     const key = "picture-" + i.toString() + "-content";
     const value = $('input[name="input-' + i.toString() + '"]').val();
 
-    formData.append(key, value);
+    fd.append(key, value);
   }
 
   // 아약스 전송
   $.ajax({
-    url: "/picture/",
-    data: formData,
+    url: "/main/"+basic_id.toString()+"/picture/",
+    data: fd,
     processData: false,
     contentType: false,
     method: "POST",
@@ -120,6 +120,7 @@ function dragOver(e) {
   }
 }
 
+
 function uploadFiles(e) {
   var target_element = $(e.target);
   e.stopPropagation();
@@ -131,26 +132,58 @@ function uploadFiles(e) {
     var imgFile = e.originalEvent.dataTransfer.files;
     var imgFileName = imgFile[0].name;
     // console.log(imgFile[0]);
-    target_element.html("");
-    var nametag = target_element.attr("name");
 
-    // 파일명 데이터에 추가
-    formData.set(nametag, imgFileName);
 
-    // 파일명 하단 input에 추가
-    var inputtag = "input-" + nametag.split("-")[1];
-    $("input[name=" + inputtag + "]").attr("value", imgFileName);
-    // console.log($("input[name=" + inputtag + "]").val());
+    // 부위별 사진 : class가 material-symbols-outlined 일때만
+    if (target_element.attr("class") =="material-symbols-outlined") {
+      target_element.html("");
+      var nametag = target_element.attr("name");
 
-    target_element.css({
-      "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
-      outline: "none",
-      padding: "35% 30%",
-      "background-size": "100%",
-      "background-repeat": "no-repeat",
-      "background-position": "center",
-      "background-color": "rgb(167, 238, 250)",
-    });
+      // 파일명 데이터에 추가
+      fd.set(nametag, imgFileName);
+
+      // 파일명 하단 input에 추가
+      var inputtag = "input-" + nametag.split("-")[1];
+      if (imgFileName.includes('.')) {
+        $("input[name=" + inputtag + "]").attr("value", imgFileName.split('.')[0]);
+      } else {
+        $("input[name=" + inputtag + "]").attr("value", imgFileName);
+      }
+
+      // console.log($("input[name=" + inputtag + "]").val());
+
+      target_element.css({
+        "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+        outline: "none",
+        padding: "35% 30%",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      });
+    }
+
+    else if(target_element.attr("class")=="square-inner") {
+      // 전경사진, 약도
+      target_element.html("");
+      var idtag = target_element.attr("name");
+      console.log(idtag)
+
+      // 파일명 데이터에 추가
+      fd.set(idtag, imgFileName);
+
+      target_element.css({
+        "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+        outline: "none",
+        padding: "35% 30%",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      });
+    }
+
+
   }
 }
 

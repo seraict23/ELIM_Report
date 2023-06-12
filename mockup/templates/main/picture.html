@@ -4,11 +4,6 @@
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
 />
 <style>
-  .square {
-    width: 100%;
-    position: relative;
-    border: 1px solid grey;
-  }
   .material-symbols-outlined {
     display: block;
     padding: 30%;
@@ -30,11 +25,41 @@
     color: green;
     cursor: pointer;
   }
+  .square {
+    width: 100%;
+    position: relative;
+    border: 1px solid grey;
+  }
+  .square-inner {
+    content: "";
+    display: flex;
+    padding-bottom: 80%;
+  }
 </style>
 
 {% endblock %} {% block BODY %}
+
+<!--전경사진-->
+
 <div class="body-content">
   <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>전경사진 및 약도</h5>
+    </div>
+    <div style="display: flex; flex-direction: row">
+      <div class="square" id="map_titlePic">
+        <div class="square-inner" name="map_titlePic">전경사진</div>
+      </div>
+      <div class="square" id="map_map">
+        <div class="square-inner" name="map_map">약도</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-content-box">
+    <div class="body-content-box-label">
+      <h5>부위별 사진</h5>
+    </div>
     <!--네비게이션 탭-->
     <ul class="nav nav-tabs" style="margin-bottom: 10px">
       <div id="nav-add-position" style="display: flex; flex-direction: row">
@@ -535,7 +560,7 @@
       <button type="button" class="btn btn-primary btn-lg" id="save">
         SAVE
       </button>
-      <button type="button" class="btn btn-secondary btn-lg">GENERATE</button>
+      <button type="button" class="btn btn-secondary btn-lg" id="generate_test">GENERATE</button>
     </div>
   </div>
 </div>
@@ -547,11 +572,308 @@
 ></script>
 
 <script>
+  //===================== CSRF 토큰 ====================
   $.ajaxSetup({
     headers: { "X-CSRFToken": "{{csrf_token}}" },
   });
-</script>
 
-<script type="text/javascript" src="/static/picture.js"></script>
+
+
+
+  // ===================== 로드 기능 ====================
+  // 전경사진 및 약도
+  $(document).ready(() => {
+    if ("{{map.map_titlePic_path}}" !== "-") {
+      console.log("why?");
+      const map_titlePic_path = "{{map.map_titlePic_path}}";
+      $("#map_titlePic").css({
+        "background-image": "url(" + "'" + map_titlePic_path + "'" + ")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      });
+    }
+
+    if ("{{map.map_map_path}}" !== "-") {
+      const map_map_path = "{{map.map_map_path}}";
+      $("#map_map").css({
+        "background-image": "url(" + "'" + map_map_path + "'" + ")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      });
+    }
+  });
+
+  // 부위별 사진
+  $(document).ready(() => {
+    let partPhoto_path = ''
+    {% for i in partPhoto %}
+      // console.log("{{i.partPhoto_number}}")
+      partPhoto_path = "{{i.partPhoto_path}}"
+      // console.log(partPhoto_path)
+      $("div[name=picture-{{i.partPhoto_number}}]").css({
+        "background-image": "url(" + "'" + partPhoto_path + "'" + ")",
+        outline: "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+        "background-color": "rgb(167, 238, 250)",
+      });
+      $("div[name=picture-{{i.partPhoto_number}}]").attr("data-id", "{{i.partPhoto_name}}")
+      $("input[name=input-"+"{{i.partPhoto_number}}".toString()+"]").attr("value", "{{i.partPhoto_note}}");
+    {% endfor %}
+  })
+
+  // ===================== 전역 변수 ====================
+  {% if partPhoto|length > 0 %}
+  let piccount = {{partPhoto|length}}
+  let navcount = Math.floor((piccount-1)/6)+1
+
+  console.log(piccount)
+  console.log(navcount)
+
+  {% else %}
+  let piccount = 0;
+  let navcount = 1;
+  {% endif %}
+
+  let fd = new FormData();
+  const basic_id = {{ basic.id }}
+
+
+
+  //===================== Generete Test ====================
+  $("#generate_test").on("click", () => {
+    fd.append("map_titlePic_name", "{{ map.map_titlePic_name }}")
+    fd.append("map_map_name", "{{ map.map_map_name }}")
+
+    $.ajax({
+      url: "/main/"+basic_id.toString()+"/test2/",
+      data: fd,
+      processData: false,
+      contentType: false,
+      method: "POST",
+      success: () => {
+        console.log("성공");
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    });
+  })
+
+
+
+
+  // ===================== 최종 요청 ====================
+  $("#save").on("click", (e) => {
+    // const answer = confirm("글을 저장하시겠습니까?");
+
+    fd.append("pagecount", navcount.toString());
+
+    for (let i = 1; i <= piccount; i++) {
+      const pic_key = "picture-"+i.toString()
+      const pic_value = $('div[name="picture-' + i.toString() + '"]').attr('data-id')
+      fd.append(pic_key, pic_value);
+
+      const note_key = "picture-note-" + i.toString();
+      const note_value = $('input[name="input-' + i.toString() + '"]').val()
+      fd.append(note_key, note_value);
+    }
+
+    fd.append("piccount", piccount)
+
+    // 아약스 전송
+    $.ajax({
+      url: "/main/"+basic_id.toString()+"/picture/",
+      data: fd,
+      processData: false,
+      contentType: false,
+      method: "POST",
+      success: (response) => {
+        console.log("성공");
+        // 서버 응답 데이터에서 리디렉션 URL 추출
+        // var redirectUrl = response.redirect_url;
+        // console.log(redirectUrl)
+        // 리디렉션 수행
+        // window.location.href = redirectUrl;
+      },
+      error: (req, status, err) => {
+        console.log(err);
+      },
+      complete: () => {
+        console.log("완료");
+      },
+    });
+
+    // if (answer) {
+    //   alert("글을 저장하였습니다.");
+    // }
+  });
+
+  // ===================== 탭 기능 ====================
+  // 탭 추가
+  $("#nav-add").on("click", () => {
+    if (navcount >= 3) {
+      alert("현재 버전은 3페이지(사진 18장) 까지만 지원합니다.");
+    } else {
+      navcount++;
+
+      $(".material-symbols-rounded").css({display:"none"});
+
+      $("#nav-add-position").append(
+        '<li class="nav-item"><a class="nav-link" id="nav-btn-' +
+          navcount.toString() + '">' + '<span class="nav-inner">'+navcount.toString() +
+          '페이지</span>'+
+          '<span class="material-symbols-rounded">backspace </span>'+
+          '</a></li>'
+      );
+    }
+  });
+
+  // 탭 삭제
+  $("#nav-add-position").on("click", ".material-symbols-rounded" ,(e) => {
+    const ask = confirm("해당 페이지의 사진이 모두 삭제됩니다. 현재 페이지를 삭제하시겠습니까?")
+    if (ask) {
+      $(".material-symbols-rounded").css({display:"flex"});
+      $(e.target).parent().parent().remove(".nav-item");
+      $("#page-" + navcount.toString()).css({ display: "none" });
+      navcount--;
+      for (let i = 1; i <= navcount; i++) {
+        if (i === navcount) {
+          $("#page-" + i.toString()).css({ display: "flex" });
+          $("#nav-btn-" + i.toString()).attr("class", "nav-link active");
+          $("#nav-btn-" + i.toString()).attr("aria-current", "page");
+        } else {
+          $("#page-" + i.toString()).css({ display: "none" });
+          $("#nav-btn-" + i.toString()).attr("class", "nav-link");
+          $("#nav-btn-" + i.toString()).attr("aria-current", "");
+        }
+      }
+    }
+  })
+
+  // 탭을 클릭했을때
+  $("#nav-add-position").on("click", ".nav-inner", (e) => {
+    const navbtnid = $(e.target).parent().attr("id");
+    $(e.target).parent().attr("class", "nav-link active");
+    $(e.target).parent().attr("aria-current", "page");
+    const navbtnnum = navbtnid.split("-")[2];
+    for (let i = 1; i <= navcount; i++) {
+      if (i.toString() === navbtnnum) {
+        $("#page-" + i.toString()).css({ display: "flex" });
+      } else {
+        $("#page-" + i.toString()).css({ display: "none" });
+        $("#nav-btn-" + i.toString()).attr("class", "nav-link");
+        $("#nav-btn-" + i.toString()).attr("aria-current", "");
+      }
+    }
+  });
+
+
+  // ===================== 드래그앤드롭 ====================
+  function dragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    var bgvalue = $(e.target).css("background-color");
+
+    // 무조건 있다로 나옴;;
+    // if ($(e.target).css("background-image")) {
+    //   console.log("있다")
+    // } else {
+    //   console.log("없다")
+    // }
+
+    if (bgvalue === "rgb(167, 238, 250)") {
+      // console.log(bgvalue);
+    } else {
+      if (e.type === "dragover") {
+        $(e.target).css({ background: "rgb(167, 238, 255)" });
+      } else {
+        $(e.target).css({ background: "white" });
+      }
+    }
+  }
+
+  function uploadFiles(e) {
+    var target_element = $(e.target);
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.originalEvent.dataTransfer.files.length > 1) {
+      alert("하나만 올리세요");
+      return;
+    } else {
+      var imgFile = e.originalEvent.dataTransfer.files;
+      var imgFileName = imgFile[0].name;
+      // console.log(imgFile[0]);
+
+
+      // 부위별 사진 : class가 material-symbols-outlined 일때만
+      if (target_element.attr("class") =="material-symbols-outlined") {
+        target_element.html("");
+        var nametag = target_element.attr("name");
+
+        // 파일명 data-id에 추가 : 여기서 직접 fd에 추가하지 않음
+        target_element.attr("data-id", imgFileName);
+
+        // 파일명 하단 input에 추가
+        var inputtag = "input-" + nametag.split("-")[1];
+        if (imgFileName.includes('.')) {
+          $("input[name=" + inputtag + "]").attr("value", imgFileName.split('.')[0]);
+        } else {
+          $("input[name=" + inputtag + "]").attr("value", imgFileName);
+        }
+
+        // console.log($("input[name=" + inputtag + "]").val());
+
+        target_element.css({
+          "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+          outline: "none",
+          padding: "35% 30%",
+          "background-size": "100%",
+          "background-repeat": "no-repeat",
+          "background-position": "center",
+          "background-color": "rgb(167, 238, 250)",
+        });
+
+        piccount++;
+      }
+      // 전경사진, 약도
+      else if(target_element.attr("class")=="square-inner") {
+        
+        target_element.html("");
+        var idtag = target_element.attr("name");
+        console.log(idtag)
+
+        // 파일명 데이터에 추가
+        fd.set(idtag, imgFileName);
+
+        target_element.css({
+          "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+          outline: "none",
+          padding: "35% 30%",
+          "background-size": "100%",
+          "background-repeat": "no-repeat",
+          "background-position": "center",
+          "background-color": "rgb(167, 238, 250)",
+        });
+      }
+    }
+  }
+
+  $(".square")
+    .on("dragover", dragOver)
+    .on("dragleave", dragOver)
+    .on("drop", uploadFiles);
+</script>
 
 {% endblock %}

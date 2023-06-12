@@ -9,7 +9,7 @@
   <body>
     <ul class="list-group">
       {% for i in contract %} {% if i.contract_name != '임시' %}
-      <li class="list-group-item" aria-current="true">
+      <li class="list-group-item" aria-current="true" data-id="{{i.pk}}">
         {{i.contract_name}}
       </li>
       {%endif%} {%endfor%}
@@ -27,10 +27,16 @@
       });
 
       $(document).on("click", ".list-group-item", (e) => {
-        const contract_name = e.target.innerText;
-        console.log(contract_name)
         let fd = new FormData();
-        fd.append("contract_name", contract_name);
+        
+        // const contract_name = e.target.innerText;
+        // console.log(contract_name)
+        // fd.append("contract_name", contract_name);
+
+        const dataId = $(e.target).attr('data-id')
+        console.log(dataId)
+        fd.append('pk', dataId)
+
 
         $.ajax({
           url: "/main/load/",

@@ -1,0 +1,276 @@
+{%extends 'main/base.html'%} {% block CSS %}
+<style>
+  div.col {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  div.row {
+    display: flex;
+    flex-direction: column;
+  }
+  .square {
+    width: 100%;
+    position: relative;
+    border: 1px solid grey;
+  }
+  .square-inner {
+    content: "";
+    display: flex;
+    padding: 35% 35%;
+  }
+  .picture-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .picture-box {
+    width: 40%;
+    margin: 5px;
+    padding: 15px;
+    background-color: rgba(240, 249, 254, 1);
+  }
+</style>
+
+{% endblock %} {% block BODY %}
+
+<div class="body-content">
+  <div
+    class="body-content-box"
+    id="handrail_background"
+    style="background-color: inherit"
+  >
+    <div
+      class="body-content-box-label"
+      style="display: flex; flex-direction: row"
+    >
+      <h5>추락 방지 시설</h5>
+      <div class="form-check form-switch" style="margin-left: 10px">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="handrail_check"
+          checked
+        />
+        <label class="form-check-label" for="handrail_check"></label>
+      </div>
+    </div>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="input-group" style="height: 100px">
+            <span class="input-group-text">금회 조사결과</span>
+            <textarea
+              class="form-control"
+              aria-label="With textarea"
+              id="handrail_inspection"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="row">
+              <div class="col col-sm-3">
+                <label
+                  for="handrail"
+                  class="form-label"
+                  style="font-weight: bold"
+                  >등급</label
+                >
+              </div>
+              <div class="col col-sm-9">
+                <div id="handrail_grade">A등급</div>
+              </div>
+            </div>
+            <div class="row">
+              <input
+                type="range"
+                class="form-range"
+                min="1"
+                max="5"
+                step="1"
+                id="handrail"
+                value="1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="row" style="justify-content: center; margin-top: 10px">
+            도로포장 현황사진
+          </div>
+          <div class="row">
+            <div class="picture-body">
+              <div class="picture-box">
+                <div class="square" id="handrail_photoA">
+                  <div class="square-inner" name="handrail_photoA"></div>
+                </div>
+              </div>
+              <div class="picture-box">
+                <div class="square" id="handrail_photoB">
+                  <div class="square-inner" name="handrail_photoB"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="body-content-box">
+      <button type="button" class="btn btn-primary btn-lg" id="save">
+        SAVE
+      </button>
+      <button type="button" class="btn btn-secondary btn-lg">GENERATE</button>
+    </div>
+  </div>
+
+  <script
+    src="https://code.jquery.com/jquery-3.6.4.js"
+    integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"
+  ></script>
+
+  <script>
+    $.ajaxSetup({
+      headers: { "X-CSRFToken": "{{csrf_token}}" },
+    });
+  </script>
+
+  <script>
+
+      let fd = new FormData();
+      const basic_id = {{ basic.id }}
+
+
+    // form-check
+      $(".form-check-input").on("change", (e)=> {
+        const textarea = $(e.target).attr("id").replace("check", "inspection")
+        const background = textarea.replace("inspection", "background")
+        if (e.target.checked) {
+          console.log(textarea)
+          $("#"+textarea).text("")
+          $("#"+background).css("background-color", "inherit")
+
+        } else {
+          console.log(textarea)
+          $("#"+textarea).text("해당 항목은 본 건축물 내 시공되어 있지 않아 조사에서 제외함")
+          $("#"+background).css("background-color", "#bebebe")
+          // $("#"+textarea).prop('disabled', true)
+        }
+      })
+
+
+      $(".form-range").on("change", (e)=>{
+        const value = $(e.target).val()
+        const id = $(e.target).attr("id")
+        let result = ""
+
+        switch (value) {
+          case "1":
+            result="A등급"
+            break;
+          case "2":
+            result="B등급"
+            break;
+          case "3":
+            result="C등급"
+            break;
+          case "4":
+            result="D등급"
+            break;
+          case "5":
+            result="E등급"
+            break;
+        }
+        $("#"+id+"_grade").text(result)
+        fd.set(id+"_grade", result)
+      })
+
+
+      // 최종 요청
+      $("#save").on("click", ()=> {
+        $("textarea.form-control").each((i, e)=> {
+          fd.append(e.id, e.value)
+        })
+
+        $.ajax({
+          url: "/main/"+basic_id.toString()+"/public/",
+          data: fd,
+          processData: false,
+          contentType: false,
+          method: "POST",
+          success: () => {
+            console.log("성공");
+          },
+          error: (req, status, err) => {
+            console.log(err);
+          },
+          complete: () => {
+            console.log("완료");
+          },
+        })
+      })
+
+
+        // ===================== 드래그앤드롭 ====================
+        function dragOver(e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          var bgvalue = $(e.target).css("background-color");
+
+          if (bgvalue === "rgb(167, 238, 250)") {
+            // console.log(bgvalue);
+          } else {
+            if (e.type === "dragover") {
+              $(e.target).css({ background: "rgb(167, 238, 255)" });
+            } else {
+              $(e.target).css({ background: "white" });
+            }
+          }
+        }
+
+        function uploadFiles(e) {
+          var target_element = $(e.target);
+          e.stopPropagation();
+          e.preventDefault();
+          if (e.originalEvent.dataTransfer.files.length > 1) {
+            alert("하나만 올리세요");
+            return;
+          } else {
+            var imgFile = e.originalEvent.dataTransfer.files;
+            var imgFileName = imgFile[0].name;
+
+            // 부위별 사진 : class가 material-symbols-outlined 일때만
+            if (target_element.attr("class") =="square-inner") {
+              target_element.html("");
+              var nametag = target_element.attr("name");
+
+              fd.set(nametag, imgFileName);
+
+              target_element.css({
+                "background-image": "url(" + window.URL.createObjectURL(imgFile[0]) + ")",
+                outline: "none",
+                padding: "35% 30%",
+                "background-size": "100%",
+                "background-repeat": "no-repeat",
+                "background-position": "center",
+                "background-color": "rgb(167, 238, 250)",
+              });
+
+            }
+
+          }
+        }
+
+        $(".square")
+          .on("dragover", dragOver)
+          .on("dragleave", dragOver)
+          .on("drop", uploadFiles);
+  </script>
+
+  {% endblock %}
+</div>
