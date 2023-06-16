@@ -5,13 +5,13 @@ from .forms import BuilidingForm, CommonForm, ContractForm, BuildingInfoForm, Bu
 from django.shortcuts import render
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from engine.common_gen import Worker
+# from engine.common_gen import Worker
 # Create your views here.
 
 # 경로
 
 
-def Test(req):
+def Common(req):
     common_form = CommonForm()
     building_form = BuilidingForm()
     contract_form = ContractForm()
@@ -30,8 +30,8 @@ def Test(req):
         })
 
 
-def Common(req):
-    pass
+def Cover(req):
+    return render(req, "prototype/cover.html")
 
 
 def Submit(req):
@@ -40,3 +40,12 @@ def Submit(req):
 
     print(req.POST)
     return render(req, "common/playground.html")
+
+def Chapter1(req):
+    return render(req, "chapter01/chapter01.html")
+
+def Chapter2(req):
+    return render(req, "chapter02/chapter02.html")
+
+def Chapter3(req):
+    return render(req, "chapter03/chapter03.html")

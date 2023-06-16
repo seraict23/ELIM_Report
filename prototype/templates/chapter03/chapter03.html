@@ -1,0 +1,35 @@
+{%extends 'common/base.html'%} {% block CSS %}
+<style>
+  .main-body-container {
+    width: 800px;
+    height: 100%;
+    margin-right: 300px;
+  }
+  .main-body-box {
+    border: solid 1px grey;
+    background-color: rgba(240, 249, 254, 1);
+    margin-bottom: 20px;
+  }
+</style>
+
+{% endblock %} {% block BODY %}
+
+<div class="main-body-container">
+  <div class="main-body-box">
+    <div style="margin: 30px"> nothing is here </div>
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"
+></script>
+
+<script>
+    $("#temporary").on("click", function() {
+        alert("아직 미구현 기능입니다.")
+    })
+</script>
+
+{% endblock %}
